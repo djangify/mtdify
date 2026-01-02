@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="max-w-4xl mx-auto">
+
+    <!-- Page Header -->
+    <div class="flex items-center justify-between mb-8">
+        <h1 class="text-2xl font-bold text-[color:var(--color-text)]">Your Business</h1>
+            {% if business_count == 0 %}
+                <a href="{% url 'businesses:business_create' %}"
+                class="px-4 py-2 bg-[color:var(--color-primary)] text-white rounded-lg hover:bg-[color:var(--color-accent)] transition">
+                    Add Business
+                </a>
+            {% endif %}
+
+    </div>
+
+    <!-- Table -->
+    <div class="overflow-hidden bg-[color:var(--color-bg)] shadow rounded-lg border border-[color:var(--color-border)]">
+        <table class="min-w-full divide-y divide-[color:var(--color-border-muted)]">
+            <thead class="bg-[color:var(--color-bg-muted)]">
+                <tr>
+                    <th class="px-4 py-3 text-left text-sm font-semibold text-[color:var(--color-text-muted)]">Business</th>
+                    <th class="px-4 py-3 text-left text-sm font-semibold text-[color:var(--color-text-muted)]">Type</th>
+                    <th class="px-4 py-3 text-left text-sm font-semibold text-[color:var(--color-text-muted)]">Period</th>
+                    <th class="px-4 py-3"></th>
+                </tr>
+            </thead>
+
+            <tbody class="divide-y divide-[color:var(--color-border-muted)]">
+                {% for business in business_list %}
+                <tr class="hover:bg-[color:var(--color-bg-muted)] transition">
+                    <td class="px-4 py-3 font-medium text-[color:var(--color-text)]">
+                        <a href="{% url 'businesses:business_detail' business.id %}"
+                           class="hover:text-[color:var(--color-accent)] transition">
+                            {{ business.name }}
+                        </a>
+                        {% if business.trade_name %}
+                        <div class="text-xs text-[color:var(--color-text-muted)]">{{ business.trade_name }}</div>
+                        {% endif %}
+                    </td>
+
+                    <td class="px-4 py-3 text-sm text-[color:var(--color-text)]">
+                        {{ business.get_business_type_display }}
+                    </td>
+
+                    <td class="px-4 py-3 text-sm text-[color:var(--color-text-muted)]">
+                        {{ business.accounting_period_start|date:"d M Y" }}
+                        →
+                        {{ business.accounting_period_end|date:"d M Y" }}
+                    </td>
+
+                    <td class="px-4 py-3 text-right">
+                        <a href="{% url 'businesses:business_detail' business.id %}"
+                           class="text-[color:var(--color-accent)] hover:underline text-sm">
+                            View
+                        </a>
+                    </td>
+                </tr>
+
+                {% empty %}
+                <tr>
+                    <td colspan="4" class="px-4 py-6 text-center text-sm text-[color:var(--color-text-muted)]">
+                        No business added yet.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+{% endblock %}

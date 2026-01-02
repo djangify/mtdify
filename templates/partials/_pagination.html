@@ -1,0 +1,84 @@
+{% if is_paginated %}
+<nav class="flex items-center justify-between border-t border-[color:var(--color-border)] bg-[color:var(--color-bg)] px-4 py-3 sm:px-6 rounded-lg mt-6" aria-label="Pagination">
+    <div class="hidden sm:block">
+        <p class="text-sm text-[color:var(--color-text-muted)]">
+            Showing
+            <span class="font-medium">{{ page_obj.start_index }}</span>
+            to
+            <span class="font-medium">{{ page_obj.end_index }}</span>
+            of
+            <span class="font-medium">{{ page_obj.paginator.count }}</span>
+            results
+        </p>
+    </div>
+    
+    <div class="flex flex-1 justify-between sm:justify-end space-x-2">
+        {% if page_obj.has_previous %}
+        <a href="?page={{ page_obj.previous_page_number }}" 
+           class="relative inline-flex items-center rounded-md bg-[color:var(--color-bg)] px-3 py-2 text-sm font-semibold text-[color:var(--color-text)] ring-1 ring-inset ring-[color:var(--color-border)] hover:bg-[color:var(--color-bg-muted)] transition-colors">
+            <svg class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+            </svg>
+            Previous
+        </a>
+        {% else %}
+        <span class="relative inline-flex items-center rounded-md bg-[color:var(--color-bg-muted)] px-3 py-2 text-sm font-semibold text-gray-400 ring-1 ring-inset ring-[color:var(--color-border)] cursor-not-allowed">
+            <svg class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+            </svg>
+            Previous
+        </span>
+        {% endif %}
+        
+        {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}" 
+           class="relative inline-flex items-center rounded-md bg-[color:var(--color-bg)] px-3 py-2 text-sm font-semibold text-[color:var(--color-text)] ring-1 ring-inset ring-[color:var(--color-border)] hover:bg-[color:var(--color-bg-muted)] transition-colors">
+            Next
+            <svg class="h-5 w-5 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            </svg>
+        </a>
+        {% else %}
+        <span class="relative inline-flex items-center rounded-md bg-[color:var(--color-bg-muted)] px-3 py-2 text-sm font-semibold text-gray-400 ring-1 ring-inset ring-[color:var(--color-border)] cursor-not-allowed">
+            Next
+            <svg class="h-5 w-5 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            </svg>
+        </span>
+        {% endif %}
+    </div>
+</nav>
+
+<!-- Page Numbers (Desktop) -->
+<div class="hidden md:flex justify-center items-center space-x-1 mt-4">
+    {% if page_obj.number > 3 %}
+    <a href="?page=1" class="px-3 py-2 rounded-md text-sm font-medium text-[color:var(--color-text)] hover:bg-[color:var(--color-bg-muted)] transition-colors">
+        1
+    </a>
+    {% if page_obj.number > 4 %}
+    <span class="px-2 text-[color:var(--color-text-muted)]">...</span>
+    {% endif %}
+    {% endif %}
+    
+    {% for num in page_obj.paginator.page_range %}
+        {% if page_obj.number == num %}
+        <span class="px-3 py-2 rounded-md text-sm font-medium bg-[color:var(--color-accent)] text-[color:var(--color-primary-contrast)]">
+            {{ num }}
+        </span>
+        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+        <a href="?page={{ num }}" class="px-3 py-2 rounded-md text-sm font-medium text-[color:var(--color-text)] hover:bg-[color:var(--color-bg-muted)] transition-colors">
+            {{ num }}
+        </a>
+        {% endif %}
+    {% endfor %}
+    
+    {% if page_obj.number < page_obj.paginator.num_pages|add:'-2' %}
+    {% if page_obj.number < page_obj.paginator.num_pages|add:'-3' %}
+    <span class="px-2 text-[color:var(--color-text-muted)]">...</span>
+    {% endif %}
+    <a href="?page={{ page_obj.paginator.num_pages }}" class="px-3 py-2 rounded-md text-sm font-medium text-[color:var(--color-text)] hover:bg-[color:var(--color-bg-muted)] transition-colors">
+        {{ page_obj.paginator.num_pages }}
+    </a>
+    {% endif %}
+</div>
+{% endif %}

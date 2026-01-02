@@ -1,0 +1,178 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="min-h-screen bg-[color:var(--color-primary-contrast)]">
+    <div class="max-w-4xl mx-auto px-4 py-10">
+
+        <div class="mb-8">
+            <h1 class="text-2xl font-bold text-[color:var(--color-text)] mb-2">Edit Expense</h1>
+            <div class="w-16 h-1 bg-[color:var(--color-accent)]"></div>
+            <p class="text-sm text-[color:var(--color-text-muted)] mt-2">
+                Editing: {{ expense.description }}
+            </p>
+        </div>
+
+        <form method="post" enctype="multipart/form-data"
+              class="bg-[color:var(--color-bg)] border border-[color:var(--color-border)]
+                     rounded-lg shadow-sm">
+            {% csrf_token %}
+
+            <div class="p-6 space-y-6">
+
+                {% if form.non_field_errors %}
+                <div class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
+                    {{ form.non_field_errors }}
+                </div>
+                {% endif %}
+
+                <div>
+                    <label class="block text-sm font-semibold mb-1">Transaction Date *</label>
+                    {{ form.date }}
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold mb-1">Description *</label>
+                    {{ form.description }}
+                </div>
+
+                <!-- VAT Box -->
+                <div class="bg-[color:var(--color-bg-muted)] p-4 rounded border border-[color:var(--color-border)]">
+
+                    <h3 class="font-bold text-sm mb-4">Amount & VAT</h3>
+                    <!-- No VAT checkbox -->
+                    <div class="mb-4 flex items-center gap-4">
+                        <input type="checkbox" id="no_vat_checkbox"
+                            class="h-4 w-4 border-[color:var(--color-border)] rounded cursor-pointer">
+                        <label for="no_vat_checkbox" class="text-sm font-semibold cursor-pointer"> 
+                            This expense has no VAT
+                        </label>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+                        <div>
+                            <label class="block text-sm font-semibold mb-1">Net Amount (£) *</label>
+                            {{ form.amount }}
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-semibold mb-1">VAT Rate (%) *</label>
+                            {{ form.vat_rate }}
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-semibold mb-1">VAT Amount (£) *</label>
+                            {{ form.vat_amount }}
+                        </div>
+
+                        <div class="flex items-end">
+                            <button type="button" onclick="calculateVAT()"
+                                class="px-4 py-2 bg-[color:var(--color-accent)] text-white rounded hover:bg-[color:var(--color-primary)]">
+                                Calculate VAT
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold mb-1">Category *</label>
+                    {{ form.category }}
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold mb-1">Supplier</label>
+                    {{ form.supplier_name }}
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold mb-1">Receipt</label>
+                    {% if expense.receipt %}
+                    <p class="text-xs mb-2">
+                        <a href="{{ expense.receipt.url }}" target="_blank"
+                           class="text-[color:var(--color-accent)] underline">
+                            View current receipt
+                        </a>
+                    </p>
+                    {% endif %}
+                    {{ form.receipt }}
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold mb-1">Notes</label>
+                    {{ form.notes }}
+                </div>
+
+                <div class="bg-[color:var(--color-bg-muted)] p-3 rounded border border-[color:var(--color-border)]">
+                    <p class="text-sm text-[color:var(--color-text-muted)]">
+                        Quarter is automatically calculated when saved.
+                    </p>
+                </div>
+            </div>
+
+            <div class="bg-[color:var(--color-bg-muted)] p-4 flex items-center justify-between border-t">
+                <button class="px-6 py-2 bg-[color:var(--color-primary)] text-white rounded hover:bg-[color:var(--color-accent)] transition">
+                    Save Changes
+                </button>
+
+                <a href="{% url 'bookkeeping:expense_detail' expense.pk %}"
+                   class="px-6 py-2 border rounded text-[color:var(--color-text)]
+                          hover:bg-[color:var(--color-bg)] transition">
+                    Cancel
+                </a>
+            </div>
+        </form>
+
+    </div>
+</div>
+
+<script>
+// VAT Calculation Function
+function calculateVAT() {
+    const amount = parseFloat(document.getElementById('{{ form.amount.id_for_label }}').value) || 0;
+    const rate = parseFloat(document.getElementById('{{ form.vat_rate.id_for_label }}').value) || 0;
+    const vatField = document.getElementById('{{ form.vat_amount.id_for_label }}');
+    vatField.value = ((amount * rate) / 100).toFixed(2);
+}
+
+// No VAT Checkbox Toggle
+const noVatBox = document.getElementById("no_vat_checkbox");
+const vatRate = document.getElementById("{{ form.vat_rate.id_for_label }}");
+const vatAmount = document.getElementById("{{ form.vat_amount.id_for_label }}");
+
+function toggleVATFields() {
+    if (noVatBox.checked) {
+        vatRate.value = 0;
+        vatAmount.value = 0;
+
+        vatRate.setAttribute("readonly", "readonly");
+        vatAmount.setAttribute("readonly", "readonly");
+
+        vatRate.classList.add("bg-gray-100");
+        vatAmount.classList.add("bg-gray-100");
+    } else {
+        vatRate.removeAttribute("readonly");
+        vatAmount.removeAttribute("readonly");
+
+        vatRate.classList.remove("bg-gray-100");
+        vatAmount.classList.remove("bg-gray-100");
+    }
+}
+
+// Initialize on page load
+document.addEventListener("DOMContentLoaded", function () {
+    // Auto-check if VAT is 0/0
+    if (vatRate.value == "0" && vatAmount.value == "0") {
+        noVatBox.checked = true;
+        toggleVATFields();
+    }
+    
+    // Auto-calculate VAT when amount or rate changes
+    document.getElementById('{{ form.amount.id_for_label }}').addEventListener('input', calculateVAT);
+    document.getElementById('{{ form.vat_rate.id_for_label }}').addEventListener('input', calculateVAT);
+});
+
+// Toggle VAT fields when checkbox changes
+noVatBox.addEventListener("change", toggleVATFields);
+</script>
+
+{% endblock %}

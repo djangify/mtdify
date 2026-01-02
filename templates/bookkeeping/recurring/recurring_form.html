@@ -1,0 +1,198 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="min-h-screen bg-[color:var(--color-primary-contrast)]">
+    <div class="max-w-4xl mx-auto px-4 py-10">
+
+        <!-- Page Header -->
+        <div class="mb-8">
+            <h1 class="text-2xl font-bold text-[color:var(--color-text)] mb-2">
+                Add Recurring Entry
+            </h1>
+            <div class="w-16 h-1 bg-[color:var(--color-accent)]"></div>
+        </div>
+
+        <!-- Form Box -->
+        <form method="post"
+              class="bg-[color:var(--color-bg)] border border-[color:var(--color-border)] rounded-lg shadow-sm">
+            {% csrf_token %}
+
+            <div class="p-6 space-y-6">
+
+                <!-- Error messages -->
+                {% if form.non_field_errors %}
+                <div class="bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded">
+                    {{ form.non_field_errors }}
+                </div>
+                {% endif %}
+
+                <!-- Two column grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                    <!-- Entry Type -->
+                    <div>
+                        <label class="block text-sm font-semibold text-[color:var(--color-text)] mb-2">
+                            Entry Type <span class="text-red-600">*</span>
+                        </label>
+                        {{ form.entry_type }} 
+
+                    </div>
+
+                    <!-- Category -->
+                    <div>
+                        <label class="block text-sm font-semibold text-[color:var(--color-text)] mb-2">
+                            Category <span class="text-red-600">*</span>
+                        </label>
+                        {{ form.category }}
+                    </div>
+
+                    <!-- Description -->
+                    <div class="md:col-span-2">
+                        <label class="block text-sm font-semibold text-[color:var(--color-text)] mb-2">
+                            Description <span class="text-red-600">*</span>
+                        </label>
+                        {{ form.description }}
+                    </div>
+
+                    <!-- Amount -->
+                    <div>
+                        <label class="block text-sm font-semibold text-[color:var(--color-text)] mb-2">
+                            Amount (£) <span class="text-red-600">*</span>
+                        </label>
+                        {{ form.amount }}
+                    </div>
+
+                    <!-- VAT Rate -->
+                    <div>
+                        <label class="block text-sm font-semibold text-[color:var(--color-text)] mb-2">
+                            VAT Rate (%)
+                        </label>
+                        {{ form.vat_rate }}
+                    </div>
+
+                    <!-- Supplier -->
+                    <div id="supplier_field">
+                        <label class="block text-sm font-semibold text-[color:var(--color-text)] mb-2">
+                            Supplier Name (Expenses Only)
+                        </label>
+                        {{ form.supplier_name }}
+                    </div>
+
+                    <!-- Client -->
+                    <div id="client_field">
+                        <label class="block text-sm font-semibold text-[color:var(--color-text)] mb-2">
+                            Client Name (Income Only)
+                        </label>
+                        {{ form.client_name }}
+                    </div>
+
+                    <!-- Day of Month -->
+                    <div>
+                        <label class="block text-sm font-semibold text-[color:var(--color-text)] mb-2">
+                            Day of Month <span class="text-red-600">*</span>
+                        </label>
+                        {{ form.day_of_month }}
+                    </div>
+                    
+                    <!-- Start Date -->
+                    <div>
+                        <label class="block text-sm font-semibold text-[color:var(--color-text)] mb-2">
+                            Start Date <span class="text-red-600">*</span>
+                        </label>
+                        {{ form.start_date }}
+                    </div>
+
+                    <!-- End Date -->
+                    <div>
+                        <label class="block text-sm font-semibold text-[color:var(--color-text)] mb-2">
+                            End Date (Optional)
+                        </label>
+                        {{ form.end_date }}
+                    </div>
+
+                    
+
+                    <!-- Active -->
+                    <div class="md:col-span-2 flex items-center gap-3 mt-2">
+                        {{ form.is_active }}
+                        <label class="text-sm font-semibold text-[color:var(--color-text)]">
+                            Active?
+                        </label>
+                    </div>
+
+                </div> <!-- END GRID -->
+
+            </div> <!-- END p-6 SECTION -->
+
+
+            <!-- Form Actions -->
+            <div class="bg-[color:var(--color-bg-muted)] px-6 py-4 border-t border-[color:var(--color-border)]
+                        flex items-center justify-between rounded-b-lg">
+
+                <div class="flex items-center gap-4">
+                    <!-- Save -->
+                    <button type="submit"
+                        class="px-6 py-2 bg-[color:var(--color-primary)] text-white
+                               hover:bg-[color:var(--color-accent)] rounded transition">
+                        Save Recurring Entry
+                    </button>
+
+                    <!-- Cancel -->
+                    <a href="{% url 'bookkeeping:recurring_list' %}"
+                        class="px-6 py-2 border border-[color:var(--color-accent)]
+                               text-[color:var(--color-text)]
+                               hover:bg-[color:var(--color-accent)]
+                               hover:text-[color:var(--color-primary-contrast)]
+                               rounded transition">
+                        Cancel
+                    </a>
+                </div>
+
+                <p class="text-xs text-[color:var(--color-text-muted)]">
+                    <span class="text-red-600">*</span> Required fields
+                </p>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+
+<script>
+function updateFields() {
+    const typeField = document.getElementById("id_entry_type");
+    const form = typeField.closest("form");
+    const supplierDiv = document.getElementById("supplier_field");
+    const clientDiv = document.getElementById("client_field");
+
+    if (typeField.value === "income") {
+        supplierDiv.style.display = "none";
+        clientDiv.style.display = "block";
+    } else if (typeField.value === "expense") {
+        supplierDiv.style.display = "block";
+        clientDiv.style.display = "none";
+    } else {
+        supplierDiv.style.display = "none";
+        clientDiv.style.display = "none";
+    }
+}
+
+// Auto-refresh form when user selects entry type
+document.getElementById("id_entry_type").addEventListener("change", function () {
+    this.closest("form").submit();
+});
+
+// On initial load
+document.addEventListener("DOMContentLoaded", updateFields);
+</script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const placeholder = document.querySelector("#id_entry_type option[value='']");
+    if (placeholder) {
+        placeholder.disabled = true;   // prevents "True" and prevents selecting blank
+    }
+});
+</script>
+
+{% endblock %}

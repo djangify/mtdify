@@ -1,0 +1,436 @@
+{% extends "base.html" %}
+{% block content %}
+{% load humanize %}
+
+<div class="max-w-7xl mx-auto px-4 py-10">
+
+    <!-- =============================
+         HEADER
+    ============================== -->
+    <div class="flex justify-between items-start mb-8">
+    <div>
+        <h1 class="text-2xl font-bold text-[color:var(--color-text)]">
+            Dashboard
+        </h1>
+        <p class="text-gray-600">
+            Bookkeeping Overview for Tax Year {{ tax_year }}
+            {% if available_tax_years|length > 1 %}
+            <div class="inline-block relative">
+                <button onclick="toggleYearDropdown()" 
+                        class="text-sm text-blue-600 hover:underline ml-2">
+                    (Switch Year)
+                </button>
+                <div id="year-dropdown" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">
+                    {% for year in available_tax_years %}
+                    <a href="{% url 'switch_tax_year' year %}" 
+                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100
+                            {% if year == selected_tax_year %}bg-gray-50 font-semibold{% endif %}">
+                        {{ year }}
+                        {% if year == selected_tax_year %}
+                        <span class="text-green-600 ml-2">✓</span>
+                        {% endif %}
+                    </a>
+                    {% endfor %}
+                </div>
+            </div>
+            
+            <script>
+            function toggleYearDropdown() {
+                const dropdown = document.getElementById('year-dropdown');
+                dropdown.classList.toggle('hidden');
+            }
+            
+            // Close dropdown when clicking outside
+            window.addEventListener('click', function(e) {
+                const dropdown = document.getElementById('year-dropdown');
+                if (!e.target.closest('button[onclick="toggleYearDropdown()"]') && !dropdown.contains(e.target)) {
+                    dropdown.classList.add('hidden');
+                }
+            });
+            </script>
+        {% endif %}
+        </p>
+
+    </div>
+
+
+    <a href="{% url 'businesses:business_list' %}"
+       class="inline-flex items-center justify-center rounded-md px-6 py-3 font-medium text-sm shadow border-2
+              border-[color:var(--color-border)]
+              bg-[color:var(--color-primary-contrast)]
+              text-[color:var(--color-text)]
+              hover:bg-[color:var(--color-accent)]
+              hover:border-[color:var(--color-accent)]
+              hover:text-[color:var(--color-primary-contrast)]
+              transition">
+        Manage Business
+    </a>
+</div>
+
+ 
+
+
+
+        <!-- =============================
+        ROW 1 — QUARTER CARDS (3 per row)
+    ============================== -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+
+        <!-- Quarter Income -->
+        <div class="bg-[color:var(--color-bg)] border border-[color:var(--color-border)]
+                    rounded-xl p-6 shadow-sm">
+            <p class="text-sm text-[color:var(--color-text-muted)]">Quarter Income</p>
+            <p class="text-3xl font-bold">£{{ quarter_income|intcomma }}</p>
+            <p class="text-xs text-[color:var(--color-text-muted)] mt-1">
+                Quarter: {{ current_quarter }}
+            </p>
+        </div>
+
+        <!-- Quarter Expenses -->
+        <div class="bg-[color:var(--color-bg)] border border-[color:var(--color-border)]
+                    rounded-xl p-6 shadow-sm">
+            <p class="text-sm text-[color:var(--color-text-muted)]">Quarter Expenses</p>
+            <p class="text-3xl font-bold">£{{ quarter_expenses|intcomma }}</p>
+            <p class="text-xs text-[color:var(--color-text-muted)] mt-1">
+                Quarter: {{ current_quarter }}
+            </p>
+        </div>
+
+        <!-- Quarter Profit -->
+        <div class="bg-[color:var(--color-bg)] border border-[color:var(--color-border)]
+                    rounded-xl p-6 shadow-sm">
+            <p class="text-sm text-[color:var(--color-text-muted)]">Quarter Profit</p>
+            <p class="text-3xl font-bold {% if quarter_profit >= 0 %}text-green-700{% else %}text-red-600{% endif %}">
+                £{{ quarter_profit|intcomma }}
+            </p>
+            <p class="text-xs text-[color:var(--color-text-muted)] mt-1">Income – Expenses</p>
+        </div>
+
+    </div>
+
+    <!-- =============================
+        ROW 2 — YEAR SUMMARY (3 per row)
+    ============================== -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+
+        <!-- Total Income -->
+        <div class="bg-[color:var(--color-bg)] border border-[color:var(--color-border)]
+                    rounded-xl p-6 shadow-sm">
+            <p class="text-sm text-[color:var(--color-text-muted)]">Total Income</p>
+            <p class="text-3xl font-bold">£{{ total_income|intcomma }}</p>
+            <p class="text-xs text-[color:var(--color-text-muted)] mt-1">
+                Tax Year: {{ tax_year }}
+            </p>
+        </div>
+
+        <!-- Total Expenses -->
+        <div class="bg-[color:var(--color-bg)] border border-[color:var(--color-border)]
+                    rounded-xl p-6 shadow-sm">
+            <p class="text-sm text-[color:var(--color-text-muted)]">Total Expenses</p>
+            <p class="text-3xl font-bold">£{{ total_expenses|intcomma }}</p>
+            <p class="text-xs text-[color:var(--color-text-muted)] mt-1">
+                Tax Year: {{ tax_year }}
+            </p>
+        </div>
+
+        <!-- YTD Profit -->
+        <div class="bg-[color:var(--color-bg)] border border-[color:var(--color-border)]
+                    rounded-xl p-6 shadow-sm">
+            <p class="text-sm text-[color:var(--color-text-muted)]">YTD Profit</p>
+            <p class="text-3xl font-bold {% if ytd_profit >= 0 %}text-green-700{% else %}text-red-600{% endif %}">
+                £{{ ytd_profit|intcomma }}
+            </p>
+            <p class="text-xs text-[color:var(--color-text-muted)] mt-1">
+                Year-to-date ({{ tax_year }})
+            </p>
+        </div>
+
+    </div>
+
+    <!-- =============================
+        QUICK ACTIONS — 4 CARDS
+    ============================== -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-14">
+
+
+        <a href="{% url 'bookkeeping:income_list' %}"
+        class="block bg-[color:var(--color-bg)] border border-[color:var(--color-border)]
+                rounded-xl p-6 hover:bg-[color:var(--color-bg-muted)] transition shadow-sm">
+            <h3 class="text-lg font-semibold text-[color:var(--color-text)] mb-2">View Income</h3>
+            <p class="text-sm text-[color:var(--color-text-muted)]">Review income records or add new entries.</p>
+        </a>
+
+        <a href="{% url 'bookkeeping:expense_list' %}"
+        class="block bg-[color:var(--color-bg)] border border-[color:var(--color-border)]
+                rounded-xl p-6 hover:bg-[color:var(--color-bg-muted)] transition shadow-sm">
+            <h3 class="text-lg font-semibold text-[color:var(--color-text)] mb-2">View Expenses</h3>
+            <p class="text-sm text-[color:var(--color-text-muted)]">Review expenses, receipts and supplier information.</p>
+        </a>
+
+        <!-- NEW: View Recurring Entries -->
+        <a href="{% url 'bookkeeping:recurring_list' %}"
+        class="block bg-[color:var(--color-bg)] border border-[color:var(--color-border)]
+                rounded-xl p-6 hover:bg-[color:var(--color-bg-muted)] transition shadow-sm">
+            <h3 class="text-lg font-semibold text-[color:var(--color-text)] mb-2">Recurring Entries</h3>
+            <p class="text-sm text-[color:var(--color-text-muted)]">
+                Manage monthly income or expense automations.
+            </p>
+        </a>
+        <a href="{% url 'bookkeeping:export_categories_screen' %}"
+        class="block bg-[color:var(--color-bg)] border border-[color:var(--color-border)]
+                rounded-xl p-6 hover:bg-[color:var(--color-bg-muted)] transition shadow-sm">
+            <h3 class="text-lg font-semibold text-[color:var(--color-text)] mb-2">Download Categories</h3>
+            <p class="text-sm text-[color:var(--color-text-muted)]">Download reports by category.</p>
+        </a>
+
+
+    </div>
+
+
+    <!-- =============================
+         TWO-COLUMN LAYOUT
+    ============================== -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+
+        <!-- =============================
+             RECENT INCOME
+        ============================== -->
+        <div class="bg-[color:var(--color-bg)] border border-[color:var(--color-border)]
+                    rounded-xl shadow-sm">
+            <div class="flex items-center justify-between px-6 py-4 border-b border-[color:var(--color-border)]">
+                <h2 class="text-xl font-semibold text-[color:var(--color-text)]">Recent Income</h2>
+                <a href="{% url 'bookkeeping:income_list' %}"
+                   class="text-sm text-[color:var(--color-primary)] hover:underline">View All</a>
+            </div>
+
+            <table class="w-full text-sm">
+                <thead class="bg-[color:var(--color-bg-muted)]">
+                    <tr class="text-left text-[color:var(--color-text-muted)]">
+                        <th class="px-6 py-3">Date</th>
+                        <th class="px-6 py-3">Description</th>
+                        <th class="px-6 py-3">Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for item in recent_income %}
+                    <tr class="border-b border-[color:var(--color-border)]">
+                        <td class="px-6 py-3">{{ item.date }}</td>
+                        <td class="px-6 py-3">{{ item.description }}</td>
+                        <td class="px-6 py-3 text-green-700">£{{ item.amount|intcomma }}</td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="3"
+                            class="px-6 py-4 text-center text-[color:var(--color-text-muted)]">
+                            No income records available.
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+
+            <!-- Downloads FOR INCOME -->
+            <div class="px-6 py-4 border-t border-[color:var(--color-border)] flex space-x-4">
+                <a href="{% url 'bookkeeping:income_export_csv' %}" class="text-sm underline text-[color:var(--color-primary)]">Download CSV</a>
+                
+            </div>
+        </div>
+
+        <!-- =============================
+             RECENT EXPENSES
+        ============================== -->
+        <div class="bg-[color:var(--color-bg)] border border-[color:var(--color-border)]
+                    rounded-xl shadow-sm">
+            <div class="flex items-center justify-between px-6 py-4 border-b border-[color:var(--color-border)]">
+                <h2 class="text-xl font-semibold text-[color:var(--color-text)]">Recent Expenses</h2>
+                <a href="{% url 'bookkeeping:expense_list' %}"
+                   class="text-sm text-[color:var(--color-primary)] hover:underline">View All</a>
+            </div>
+
+            <table class="w-full text-sm">
+                <thead class="bg-[color:var(--color-bg-muted)]">
+                    <tr class="text-left text-[color:var(--color-text-muted)]">
+                        <th class="px-6 py-3">Date</th>
+                        <th class="px-6 py-3">Description</th>
+                        <th class="px-6 py-3">Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for item in recent_expenses %}
+                    <tr class="border-b border-[color:var(--color-border)]">
+                        <td class="px-6 py-3">{{ item.date }}</td>
+                        <td class="px-6 py-3">{{ item.description }}</td>
+                        <td class="px-6 py-3 text-red-600">£{{ item.amount|intcomma }}</td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="3"
+                            class="px-6 py-4 text-center text-[color:var(--color-text-muted)]">
+                            No expense records available.
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+
+            <!-- Downloads FOR EXPENSES-->
+            <div class="px-6 py-4 border-t border-[color:var(--color-border)] flex space-x-4">
+                <a href="{% url 'bookkeeping:expense_export_csv' %}" class="text-sm underline text-[color:var(--color-primary)]">Download CSV</a>
+                
+            </div>
+        </div>
+
+    </div>
+    <!-- =============================
+     DOWNLOAD REPORTS — 4 + 4 CARDS
+============================== -->
+<div class="mt-16">
+
+    <h2 class="text-2xl font-bold text-[color:var(--color-text)] mb-6">
+        Download Reports
+    </h2>
+
+    <!-- ROW 1 — FOUR CARDS -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-10">
+
+        <!-- Export All Income -->
+        <a href="{% url 'bookkeeping:income_export_csv' %}"
+           class="block bg-[color:var(--color-bg)] border border-[color:var(--color-border)]
+                  rounded-xl p-6 shadow-sm hover:bg-[color:var(--color-bg-muted)] transition">
+            <h3 class="text-lg font-semibold mb-2 text-[color:var(--color-text)]">
+                Export All Income
+            </h3>
+            <p class="text-sm text-[color:var(--color-text-muted)]">
+                Download a CSV containing every income entry.
+            </p>
+        </a>
+
+        <!-- Export All Expenses -->
+        <a href="{% url 'bookkeeping:expense_export_csv' %}"
+           class="block bg-[color:var(--color-bg)] border border-[color:var(--color-border)]
+                  rounded-xl p-6 shadow-sm hover:bg-[color:var(--color-bg-muted)] transition">
+            <h3 class="text-lg font-semibold mb-2 text-[color:var(--color-text)]">
+                Export All Expenses
+            </h3>
+            <p class="text-sm text-[color:var(--color-text-muted)]">
+                Download a CSV containing every expense entry.
+            </p>
+        </a>
+
+        <!-- Income by Category -->
+        <div class="bg-[color:var(--color-bg)] border border-[color:var(--color-border)]
+                    rounded-xl p-6 shadow-sm">
+            <h3 class="text-lg font-semibold mb-2 text-[color:var(--color-text)]">
+                Income by Category
+            </h3>
+            <p class="text-sm text-[color:var(--color-text-muted)] mb-3">
+                CSV and Print versions available.
+            </p>
+            <div class="space-y-2">
+                <a href="{% url 'bookkeeping:income_category_csv' %}"
+                   class="text-sm underline text-[color:var(--color-primary)] block">
+                    Download CSV
+                </a>
+                <a href="{% url 'bookkeeping:income_category_print' %}" target="_blank"
+                   class="text-sm underline text-[color:var(--color-primary)] block">
+                    Print Version
+                </a>
+            </div>
+        </div>
+
+        <!-- Expenses by Category -->
+        <div class="bg-[color:var(--color-bg)] border border-[color:var(--color-border)]
+                    rounded-xl p-6 shadow-sm">
+            <h3 class="text-lg font-semibold mb-2 text-[color:var(--color-text)]">
+                Expenses by Category
+            </h3>
+            <p class="text-sm text-[color:var(--color-text-muted)] mb-3">
+                CSV and Print versions available.
+            </p>
+            <div class="space-y-2">
+                <a href="{% url 'bookkeeping:export_category_csv' slug='all-expenses' %}"
+                   class="text-sm underline text-[color:var(--color-primary)] block">
+                    Download CSV
+                </a>
+                <a href="{% url 'bookkeeping:export_by_category' slug='all-expenses' %}" target="_blank"
+                   class="text-sm underline text-[color:var(--color-primary)] block">
+                    Print Version
+                </a>
+            </div>
+        </div>
+
+    </div>
+
+
+
+    <!-- ROW 2 — FOUR CARDS (NEW Simplified Profit Report Added) -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+
+        <!-- NEW: SIMPLIFIED PROFIT REPORT -->
+        <a href="{% url 'bookkeeping:yearly_profit_csv' %}"
+           class="block bg-[color:var(--color-bg)] border border-[color:var(--color-border)]
+                  rounded-xl p-6 shadow-sm hover:bg-[color:var(--color-bg-muted)] transition">
+            <h3 class="text-lg font-semibold mb-2 text-[color:var(--color-text)]">
+                Simplified Profit Report
+            </h3>
+            <p class="text-sm text-[color:var(--color-text-muted)]">
+                Complete year overview with quarterly breakdown (CSV).
+            </p>
+        </a>
+
+        <!-- Combined Totals -->
+        <div class="bg-[color:var(--color-bg)] border border-[color:var(--color-border)]
+                    rounded-xl p-6 shadow-sm">
+            <h3 class="text-lg font-semibold mb-2 text-[color:var(--color-text)]">
+                Combined Category Totals
+            </h3>
+            <p class="text-sm text-[color:var(--color-text-muted)] mb-3">
+                Compare income, expenses, and net totals.
+            </p>
+            <div class="space-y-2">
+                <a href="{% url 'bookkeeping:combined_category_csv' %}"
+                   class="text-sm underline text-[color:var(--color-primary)] block">
+                    Download CSV
+                </a>
+                <a href="{% url 'bookkeeping:combined_category_print' %}" target="_blank"
+                   class="text-sm underline text-[color:var(--color-primary)] block">
+                    Print Version
+                </a>
+            </div>
+        </div>
+
+        <!-- Summary Reports -->
+        <div class="bg-[color:var(--color-bg)] border border-[color:var(--color-border)]
+                    rounded-xl p-6 shadow-sm">
+            <h3 class="text-lg font-semibold mb-2 text-[color:var(--color-text)]">
+                Summary Reports
+            </h3>
+            <p class="text-sm text-[color:var(--color-text-muted)] mb-3">
+                Year-to-date performance and all transactions.
+            </p>
+            <div class="space-y-2">
+                <a href="{% url 'bookkeeping:combined_category_print' %}" target="_blank"
+                   class="text-sm underline text-[color:var(--color-primary)] block">
+                    YTD Profit & Loss (Print)
+                </a>
+                <a href="{% url 'bookkeeping:combined_category_print' %}" target="_blank"
+                   class="text-sm underline text-[color:var(--color-primary)] block">
+                    All Transactions (Print)
+                </a>
+            </div>
+        </div>
+
+        <!-- EMPTY SLOT 2 -->
+        <div class="bg-[color:var(--color-bg-muted)] border border-[color:var(--color-border)]
+                    rounded-xl p-6 shadow-sm">
+            <!-- Reserved for future -->
+        </div>
+
+    </div>
+
+</div>
+
+
+</div>
+
+{% endblock %}

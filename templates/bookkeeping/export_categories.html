@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="max-w-4xl mx-auto py-10">
+    <h1 class="text-2xl font-bold mb-6 text-[color:var(--color-text)]">
+        Export Expenses & Income by Category
+    </h1>
+    
+    <div class="bg-[color:var(--color-bg)] border p-6 rounded">
+        <p class="mb-4">Select a category below to download its data as a CSV file.</p>
+
+        <ul class="space-y-3">
+            {% for cat in categories %}
+            <li class="flex justify-between items-center">
+                <span>{{ cat.name }} ({{ cat.category_type }})</span>
+
+                <a href="{% url 'bookkeeping:export_category_csv' cat.slug %}"
+                   class="px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700">
+                    Download CSV
+                </a>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+
+{% endblock %}

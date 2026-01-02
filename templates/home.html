@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="max-w-5xl mx-auto py-16 px-6">
+
+    <!-- Hero Section -->
+    <div class="text-center mb-16">
+        <h1 class="text-4xl font-bold text-[color:var(--color-text)] mb-4">
+            Welcome to MTDify.uk
+        </h1>
+        <p class="text-lg text-[color:var(--color-text-muted)] max-w-2xl mx-auto">
+            
+            A lightweight, offline-first bookkeeping tool for UK sole traders and small businesses.
+            Your data stays on your device — no cloud, no SaaS, no third-party storage.
+        </p>
+    </div>
+
+    <!-- Quick Links -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+
+        <a href="https://mtdify.uk/docs/" target="_blank"
+           class="block bg-[color:var(--color-bg)] border border-[color:var(--color-border)] rounded-lg p-6 
+                  hover:bg-[color:var(--color-bg-muted)] transition">
+            <h3 class="text-xl font-semibold mb-2 text-[color:var(--color-text)]">
+                Documentation
+            </h3>
+            <p class="text-sm text-[color:var(--color-text-muted)]">
+                Learn how to install, configure, and use the Local Edition.
+            </p>
+        </a>
+
+        <a href="https://mtdify.uk/docs/installation-guide/" target="_blank"
+           class="block bg-[color:var(--color-bg)] border border-[color:var(--color-border)] rounded-lg p-6 
+                  hover:bg-[color:var(--color-bg-muted)] transition">
+            <h3 class="text-xl font-semibold mb-2 text-[color:var(--color-text)]">
+                Getting Started
+            </h3>
+            <p class="text-sm text-[color:var(--color-text-muted)]">
+                Step-by-step guide for setting up your first business and entering transactions.
+            </p>
+        </a>
+
+        <a href="{% url 'businesses:business_list' %}"
+           class="block bg-[color:var(--color-bg)] border border-[color:var(--color-border)] rounded-lg p-6 
+                  hover:bg-[color:var(--color-bg-muted)] transition">
+            <h3 class="text-xl font-semibold mb-2 text-[color:var(--color-text)]">
+                Your Business
+            </h3>
+            <p class="text-sm text-[color:var(--color-text-muted)]">
+                View, edit, and manage your locally stored business.
+            </p>
+        </a>
+
+    </div>
+
+    <!-- About Local Edition -->
+    <div class="bg-[color:var(--color-bg-muted)] border border-[color:var(--color-border)] rounded-lg p-8">
+        <h2 class="text-2xl font-bold text-[color:var(--color-text)] mb-4">About This Edition</h2>
+        <p class="text-[color:var(--color-text-muted)] leading-relaxed">
+            MTDify Local Edition is designed for users who prefer owning their own data and keeping it fully under
+            their control. There are no remote servers, no cloud accounts, and no automated submissions.
+            Everything is processed directly on your device using SQLite or PostgreSQL.
+        </p>
+        <p class="text-[color:var(--color-text-muted)] mt-4 leading-relaxed">
+            This edition is ideal for solo developers, privacy-focused users, and anyone who wants a
+            straightforward bookkeeping tool without a subscription.
+        </p>
+    </div>
+
+</div>
+
+{% endblock %}

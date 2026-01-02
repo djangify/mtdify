@@ -1,0 +1,164 @@
+@import "tailwindcss";
+
+/* -----------------------------------
+   GLOBAL TYPOGRAPHY + LINK STYLES
+------------------------------------ */
+@layer base {
+  h1 {
+    @apply text-4xl font-bold text-[color:var(--color-text)];
+  }
+
+  h2 {
+    @apply text-3xl font-semibold text-[color:var(--color-text)];
+  }
+
+  p {
+    @apply text-lg text-[color:var(--color-text)] leading-relaxed;
+  }
+
+  ul,
+  ol {
+    @apply text-lg text-[color:var(--color-text)] leading-relaxed list-inside;
+  }
+
+  li {
+    @apply text-lg text-[color:var(--color-text)] leading-relaxed;
+  }
+
+  a {
+    @apply text-[color:var(--color-accent)] hover:text-[color:var(--color-accent-hover)] transition-colors;
+  }
+}
+
+/* -----------------------------------
+   PROSE (similar to typography plugin)
+------------------------------------ */
+@layer components {
+  .prose {
+    @apply max-w-none text-[color:var(--color-text)] leading-relaxed;
+  }
+
+  .prose p {
+    @apply mb-4 text-lg;
+  }
+
+  .prose h2,
+  .prose h3,
+  .prose h4 {
+    @apply mt-6 mb-2 font-semibold text-[color:var(--color-primary)];
+  }
+
+  .prose ul {
+    @apply list-disc list-inside mb-4 ml-4;
+  }
+
+  .prose ol {
+    @apply list-decimal list-inside mb-4 ml-4;
+  }
+
+  .prose li {
+    @apply mb-1;
+  }
+
+  .prose strong {
+    @apply font-semibold text-[color:var(--color-primary)];
+  }
+
+  .prose a {
+    @apply underline text-[color:var(--color-accent)] hover:text-[color:var(--color-accent-hover)];
+  }
+}
+
+/* -----------------------------------
+   TAILWIND v4 THEME VARIABLES
+   *** NEW MTDify.uk brand colours ***
+------------------------------------ */
+@theme {
+  /* ---- Core Palette ---- */
+  --color-bg: #ffffff;
+  /* Main background */
+  --color-bg-muted: #f8fafc;
+  /* Soft grey background */
+
+  --color-text: #111111;
+  /* Rich black text */
+  --color-text-muted: #2e2e2e;
+  /* Softer grey text */
+
+  /* ---- Primary Colour (Dark Charcoal) ---- */
+  --color-primary: #1a1a1a;
+  --color-primary-contrast: #ffffff;
+
+  /* ---- MTDify Accent Colour: SaaS Gold ---- */
+  --color-accent: #b68a23;
+  /* Buttons, highlights, links */
+  --color-accent-hover: #966f1c;
+  /* Slightly darker gold */
+
+  /* ---- Optional Interaction Teal ---- */
+  --color-teal: #0f97a6;
+  --color-teal-hover: #0d7e8c;
+
+  /* ---- Borders and Lines ---- */
+  --color-border: #e5e5e5;
+
+  /* ---- ADD YELLOW FOR STARS ---- */
+  --color-yellow-400: #facc15;
+  --color-yellow-500: #eab308;
+
+  /* ---- ADD GRAYS FOR STARS ---- */
+  --color-gray-300: #d1d5db;
+  --color-gray-600: #4b5563;
+  --color-gray-700: #374151;
+  --color-gray-900: #111827;
+}
+
+
+
+/* -----------------------------------
+   UTILITIES
+------------------------------------ */
+@layer utilities {
+  .fade-transition {
+    @apply transition-opacity duration-[2000ms] ease-in-out;
+  }
+}
+
+/* -----------------------------------
+   LIST / BULLET FIXES
+------------------------------------ */
+ul,
+ol {
+  list-style-position: outside !important;
+  padding-left: 1.5rem !important;
+}
+
+li {
+  text-indent: 0 !important;
+  margin-bottom: 0.25rem;
+}
+
+.prose ul,
+.prose ol {
+  list-style-position: outside !important;
+  padding-left: 1.5rem !important;
+  margin-bottom: 1rem;
+}
+
+.prose li {
+  margin-bottom: 0.25rem;
+  color: var(--color-text);
+}
+
+.text-center ul,
+.text-center ol {
+  text-align: left !important;
+  margin-left: auto;
+  margin-right: auto;
+  list-style-position: outside;
+  padding-left: 1.5rem;
+}
+
+#messages-container {
+  top: 3.5rem !important;
+}

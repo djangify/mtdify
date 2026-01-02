@@ -1,0 +1,115 @@
+<!--mtdify_local: bookeeping/income/income_form.html-->
+{% extends "base.html" %}
+{% block content %}
+
+<div class="min-h-screen bg-[color:var(--color-primary-contrast)]">
+    <div class="max-w-4xl mx-auto px-4 py-10">
+
+        <div class="mb-8">
+            <h1 class="text-2xl font-bold text-[color:var(--color-text)] mb-2">Add Income</h1>
+            <div class="w-16 h-1 bg-[color:var(--color-accent)]"></div>
+        </div>
+
+        <form method="post" enctype="multipart/form-data"
+              class="bg-[color:var(--color-bg)] border border-[color:var(--color-border)] rounded-lg shadow-sm">
+            {% csrf_token %}
+
+            <div class="p-6 space-y-6">
+
+                <div>
+                    <label class="block text-sm font-semibold text-[color:var(--color-text)] mb-2">
+                        Transaction Date <span class="text-red-600">*</span>
+                    </label>
+                    {{ form.date }}
+                    <p class="text-sm text-[color:var(--color-text-muted)] mb-2">
+                        Date you received or invoiced this income
+                    </p>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-[color:var(--color-text)] mb-2">
+                        Description <span class="text-red-600">*</span>
+                    </label>
+                    {{ form.description }}
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-[color:var(--color-text)] mb-2">
+                        Amount (£) <span class="text-red-600">*</span>
+                    </label>
+                    {{ form.amount }}
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-[color:var(--color-text)] mb-2">
+                        Income Category <span class="text-red-600">*</span>
+                    </label>
+                    {{ form.category }}
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-[color:var(--color-text)] mb-2">
+                        Client/Customer Name
+                    </label>
+                    {{ form.client_name }}
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-[color:var(--color-text)] mb-2">
+                        Invoice Number
+                    </label>
+                    {{ form.invoice_number }}
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-[color:var(--color-text)] mb-2">
+                        Notes
+                    </label>
+                    {{ form.notes }}
+                </div>
+
+                <div class="bg-[color:var(--color-bg-muted)] border border-[color:var(--color-border)] rounded p-4">
+                    <label class="block text-sm font-semibold text-[color:var(--color-text)] mb-1">
+                        Tax Quarter
+                    </label>
+                    <p class="text-sm text-[color:var(--color-text-muted)]">Will be calculated automatically</p>
+                </div>
+
+            </div>
+
+            <div
+                class="bg-[color:var(--color-bg-muted)] px-6 py-4 border-t border-[color:var(--color-border)] 
+                       flex items-center justify-between rounded-b-lg">
+
+                <div class="flex items-center gap-4">
+
+                    <button type="submit"
+                            class="px-6 py-2 bg-[color:var(--color-primary)] text-white
+                                   hover:bg-[color:var(--color-accent)] rounded transition">
+                        Save Income
+                    </button>
+
+                    <button type="submit" name="save_and_add"
+                            class="px-6 py-2 border border-[color:var(--color-accent)]
+                                   text-[color:var(--color-text)]
+                                   hover:bg-[color:var(--color-primary)]
+                                   hover:text-white rounded transition">
+                        Save & Add Another
+                    </button>
+
+                    <a href="{% url 'bookkeeping:income_list' %}"
+                       class="px-6 py-2 border border-[color:var(--color-border)]
+                              text-[color:var(--color-text)] hover:bg-[color:var(--color-bg-muted)] rounded transition">
+                        Cancel
+                    </a>
+
+                </div>
+
+            </div>
+
+        </form>
+
+    </div>
+</div>
+
+{% endblock %}

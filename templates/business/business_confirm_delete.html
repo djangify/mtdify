@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="min-h-screen bg-[color:var(--color-primary-contrast)]">
+    <div class="max-w-2xl mx-auto px-4 py-10">
+
+        <h1 class="text-2xl font-bold text-red-600 mb-4">Delete Business</h1>
+        <div class="w-16 h-1 bg-red-600 mb-8"></div>
+
+        <div class="bg-[color:var(--color-bg)] border-2 border-red-300 rounded-lg shadow-sm">
+            <div class="p-6">
+                <div class="bg-red-50 border-l-4 border-red-500 p-4 mb-6">
+                    <h3 class="text-sm font-semibold text-red-800">Warning: This action cannot be undone</h3>
+                    <p class="mt-2 text-sm text-red-700">
+                        Deleting this business will permanently remove:
+                    </p>
+                    <ul class="mt-2 text-sm text-red-700 list-disc list-inside">
+                        <li>All income entries</li>
+                        <li>All expense entries</li>
+                        <li>All recurring entries associated with this business (if any)</li>
+                        <li>All business settings and saved details</li>
+                    </ul>
+                    <p class="mt-2 text-sm text-red-700">
+                        This cannot be undone.
+                    </p>
+                </div>
+
+                <div class="space-y-4">
+                    <h2 class="text-lg font-semibold text-[color:var(--color-text)]">
+                        You are about to delete:
+                    </h2>
+
+                    <div class="bg-[color:var(--color-bg-muted)] border border-[color:var(--color-border)] rounded-lg p-4 space-y-3">
+
+                        <div>
+                            <label class="block text-sm font-semibold text-[color:var(--color-text-muted)]">Business Name</label>
+                            <p class="text-lg font-semibold text-[color:var(--color-text)]">{{ business.name }}</p>
+                        </div>
+
+                        {% if business.trade_name %}
+                        <div>
+                            <label class="block text-sm font-semibold text-[color:var(--color-text-muted)]">Trading Name</label>
+                            <p class="text-[color:var(--color-text)]">{{ business.trade_name }}</p>
+                        </div>
+                        {% endif %}
+
+                        <div>
+                            <label class="block text-sm font-semibold text-[color:var(--color-text-muted)]">Business Type</label>
+                            <p class="text-[color:var(--color-text)]">{{ business.get_business_type_display }}</p>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-semibold text-[color:var(--color-text-muted)]">Accounting Period</label>
+                            <p class="text-[color:var(--color-text)]">
+                                {{ business.accounting_period_start|date:"d M Y" }} →
+                                {{ business.accounting_period_end|date:"d M Y" }}
+                            </p>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-red-50 px-6 py-4 border-t-2 border-red-300 rounded-b-lg">
+                <form method="post" class="flex items-center gap-4">
+                    {% csrf_token %}
+
+                    <button type="submit"
+                            class="px-6 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition">
+                        Yes, Delete This Business
+                    </button>
+
+                    <a href="{% url 'businesses:business_detail' business.id %}"
+                       class="px-6 py-2 border border-[color:var(--color-border)] text-[color:var(--color-text)] bg-white rounded hover:bg-[color:var(--color-bg-muted)] transition">
+                        Cancel
+                    </a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

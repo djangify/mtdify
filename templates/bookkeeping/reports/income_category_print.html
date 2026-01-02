@@ -1,0 +1,48 @@
+{% extends "bookkeeping/reports/base_print.html" %}
+
+{% block title %}Income by Category{% endblock %}
+{% block report_title %}Income by Category{% endblock %}
+
+{% block content %}
+
+<table class="report-table">
+    <thead>
+        <tr>
+            <th>Category</th>
+            <th class="text-right">Total Amount</th>
+            <th class="text-center">Number of Entries</th>
+            <th class="text-right">Average Amount</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for cat in categories %}
+        <tr>
+            <td>{{ cat.category__name }}</td>
+            <td class="text-right">£{{ cat.total|floatformat:2 }}</td>
+            <td class="text-center">{{ cat.count }}</td>
+            <td class="text-right">
+                {% if cat.count > 0 %}
+                    £{% widthratio cat.total cat.count 1 %}
+                {% else %}
+                    £0.00
+                {% endif %}
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="4" class="text-center">No income data available</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+
+    <tfoot>
+        <tr class="summary-row">
+            <td><strong>TOTAL</strong></td>
+            <td class="text-right"><strong>£{{ total_income|floatformat:2 }}</strong></td>
+            <td colspan="2"></td>
+        </tr>
+    </tfoot>
+</table>
+
+{% endblock %}

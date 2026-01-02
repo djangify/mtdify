@@ -1,0 +1,200 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="min-h-screen bg-[color:var(--color-primary-contrast)]">
+    <div class="max-w-4xl mx-auto px-4 py-10">
+
+        <!-- Page Header -->
+        <div class="mb-8">
+            <h1 class="text-2xl font-bold text-[color:var(--color-text)] mb-2">
+                {% if object %}Edit Business{% else %}Add Business{% endif %}
+            </h1>
+            <div class="w-16 h-1 bg-[color:var(--color-accent)]"></div>
+        </div>
+
+        <!-- Form -->
+        <form method="post"
+              class="bg-[color:var(--color-bg)] border border-[color:var(--color-border)] rounded-lg shadow-sm">
+            {% csrf_token %}
+
+            <div class="p-6 space-y-6">
+
+                {% if form.non_field_errors %}
+                <div class="bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded">
+                    {{ form.non_field_errors }}
+                </div>
+                {% endif %}
+
+                <!-- Business Information -->
+                <div>
+                    <h2 class="text-lg font-semibold text-[color:var(--color-text)] mb-4 pb-2 border-b border-[color:var(--color-border)]">
+                        Business Information
+                    </h2>
+
+                    <!-- Business Name -->
+                    <div>
+                        <label for="{{ form.name.id_for_label }}"
+                               class="block text-sm font-semibold text-[color:var(--color-text)] mb-2">
+                            Business Name <span class="text-red-600">*</span>
+                        </label>
+                        <p class="text-sm text-[color:var(--color-text-muted)] mb-2">
+                            The official registered name of your business.
+                        </p>
+                        {{ form.name }}
+                        {% if form.name.errors %}
+                        <p class="mt-1 text-sm text-red-600">{{ form.name.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+
+                    <!-- Trading Name -->
+                    <div class="mt-6">
+                        <label for="{{ form.trade_name.id_for_label }}"
+                               class="block text-sm font-semibold text-[color:var(--color-text)] mb-2">
+                            Trading Name
+                        </label>
+                        <p class="text-sm text-[color:var(--color-text-muted)] mb-2">
+                            If you trade under a different name (optional).
+                        </p>
+                        {{ form.trade_name }}
+                        {% if form.trade_name.errors %}
+                        <p class="mt-1 text-sm text-red-600">{{ form.trade_name.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+
+                    <!-- Business Type -->
+                    <div class="mt-6 mb-4">
+                        <label for="{{ form.business_type.id_for_label }}"
+                               class="block text-sm font-semibold text-[color:var(--color-text)] mb-2">
+                            Business Type <span class="text-red-600">*</span>
+                        </label>
+                        <p class="text-sm text-[color:var(--color-text-muted)] mb-2">
+                            Choose the category that best describes your work.
+                        </p>
+                        {{ form.business_type }}
+                        {% if form.business_type.errors %}
+                        <p class="mt-1 text-sm text-red-600">{{ form.business_type.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+
+                
+                <!-- Accounting Details -->
+                <div>
+                    <h2 class="text-lg font-semibold text-[color:var(--color-text)] mb-4 pb-2 border-b border-[color:var(--color-border)]">
+                        Accounting Details
+                    </h2>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                        <!-- Start Date -->
+                        <div>
+                            <label for="{{ form.accounting_period_start.id_for_label }}"
+                                   class="block text-sm font-semibold text-[color:var(--color-text)] mb-2">
+                                Accounting Period Start <span class="text-red-600">*</span>
+                            </label>
+                            <p class="text-sm text-[color:var(--color-text-muted)] mb-2">
+                                The date your accounting year begins.
+                            </p>
+                            {{ form.accounting_period_start }}
+                            {% if form.accounting_period_start.errors %}
+                            <p class="mt-1 text-sm text-red-600">{{ form.accounting_period_start.errors.0 }}</p>
+                            {% else %}
+                            <p class="text-xs text-[color:var(--color-text-muted)] mt-1 italic">
+                                Usually 6 April (UK tax year).
+                            </p>
+                            {% endif %}
+                        </div>
+
+                        <!-- End Date -->
+                        <div>
+                            <label for="{{ form.accounting_period_end.id_for_label }}"
+                                   class="block text-sm font-semibold text-[color:var(--color-text)] mb-2">
+                                Accounting Period End <span class="text-red-600">*</span>
+                            </label>
+                            <p class="text-sm text-[color:var(--color-text-muted)] mb-2">
+                                The date your accounting year ends.
+                            </p>
+                            {{ form.accounting_period_end }}
+                            {% if form.accounting_period_end.errors %}
+                            <p class="mt-1 text-sm text-red-600">{{ form.accounting_period_end.errors.0 }}</p>
+                            {% else %}
+                            <p class="text-xs text-[color:var(--color-text-muted)] mt-1 italic">
+                                Usually 5 April (UK tax year).
+                            </p>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <!-- Cash or Accruals -->
+                    <div class="mt-6">
+                        <label for="{{ form.cash_or_accruals.id_for_label }}"
+                               class="block text-sm font-semibold text-[color:var(--color-text)] mb-2">
+                            Accounting Method <span class="text-red-600">*</span>
+                        </label>
+                        <p class="text-sm text-[color:var(--color-text-muted)] mb-2">
+                            Choose how you report your income and expenses.
+                        </p>
+                        {{ form.cash_or_accruals }}
+                        {% if form.cash_or_accruals.errors %}
+                        <p class="mt-1 text-sm text-red-600">{{ form.cash_or_accruals.errors.0 }}</p>
+                        {% else %}
+                        <p class="text-xs text-[color:var(--color-text-muted)] mt-1 italic">
+                            Most small businesses use cash basis.
+                        </p>
+                        {% endif %}
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Actions -->
+            <div class="bg-[color:var(--color-bg-muted)] px-6 py-4 border-t border-[color:var(--color-border)]
+                        flex items-center justify-between rounded-b-lg">
+
+                <div class="flex items-center gap-4">
+                    <button type="submit"
+                            class="px-6 py-2 bg-[color:var(--color-primary)]
+                                   text-[color:var(--color-primary-contrast)]
+                                   border border-[color:var(--color-accent)]
+                                   hover:bg-[color:var(--color-accent)] hover:text-white
+                                   font-medium rounded transition-colors">
+                        {% if object %}Update Business{% else %}Save Business{% endif %}
+                    </button>
+
+                    <a href="{% url 'businesses:business_list' %}"
+                       class="px-6 py-2 border border-[color:var(--color-border)]
+                              text-[color:var(--color-text)]
+                              hover:bg-[color:var(--color-bg-muted)]
+                              rounded transition-colors">
+                        Cancel
+                    </a>
+                </div>
+
+                <p class="text-xs text-[color:var(--color-text-muted)]">
+                    <span class="text-red-600">*</span> Required fields
+                </p>
+            </div>
+        </form>
+
+    </div>
+</div>
+
+<style>
+input[type="text"],
+input[type="date"],
+select {
+    width: 100%;
+    border: 1px solid var(--color-border);
+    border-radius: 0.375rem;
+    padding: 0.5rem 0.75rem;
+    background-color: var(--color-bg);
+    color: var(--color-text);
+}
+input:focus, select:focus {
+    outline: none;
+    border-color: var(--color-accent);
+}
+select { cursor: pointer; }
+</style>
+
+{% endblock %}

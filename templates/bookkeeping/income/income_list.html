@@ -1,0 +1,123 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="min-h-screen bg-[color:var(--color-primary-contrast)]">
+    <div class="max-w-7xl mx-auto px-4 py-10">
+
+        <!-- Header -->
+        <div class="flex items-center justify-between mb-10">
+            <div>
+                <h1 class="text-2xl font-bold text-[color:var(--color-text)]">Income</h1>
+                {% if selected_tax_year %}
+                    <p class="text-sm text-[color:var(--color-text-muted)] mt-1">
+                        Viewing: {{ selected_tax_year }}
+                    </p>
+                {% endif %}
+
+                <div class="w-16 h-1 mt-2 bg-[color:var(--color-accent)]"></div>
+            </div>
+
+            <a href="{% url 'bookkeeping:income_create' %}"
+            class="px-4 py-2 border text-sm font-medium 
+                    border-[color:var(--color-accent)]
+                    hover:bg-[color:var(--color-primary)]
+                    hover:text-white transition">
+                Add Income
+            </a>
+        </div>
+
+        <!-- Filters -->
+        <form method="get" class="mb-6 grid grid-cols-1 md:grid-cols-4 gap-4">
+             <!-- Quick Search Label -->
+        
+            <input type="text" name="search" value="{{ request.GET.search }}"
+                placeholder="Search description or client"
+                class="border p-2 w-full bg-[color:var(--color-bg)] text-[color:var(--color-text)]">
+
+            <select name="quarter"
+                class="border p-2 bg-[color:var(--color-bg)] text-[color:var(--color-text)]">
+                <option value="">All Quarters</option>
+                {% for q in quarters %}
+                <option value="{{ q }}" {% if request.GET.quarter == q %}selected{% endif %}>{{ q }}</option>
+                {% endfor %}
+            </select>
+
+            <select name="category"
+                class="border p-2 bg-[color:var(--color-bg)] text-[color:var(--color-text)]">
+                <option value="">All Categories</option>
+                {% for cat in income_categories %}
+                <option value="{{ cat.id }}" {% if request.GET.category == cat.id|stringformat:'s' %}selected{% endif %}>
+                    {{ cat.name }}
+                </option>
+                {% endfor %}
+            </select>
+
+            <button class="border px-4 py-2 border-[color:var(--color-accent)]
+                        hover:bg-[color:var(--color-primary)]
+                        hover:text-white transition">
+                Apply Filters
+            </button>
+        </form>
+
+        <!-- Table -->
+        <div class="overflow-x-auto bg-[color:var(--color-bg)] border border-[color:var(--color-border)]">
+            <table class="min-w-full text-left">
+                <thead class="border-b border-[color:var(--color-border)] bg-[color:var(--color-bg-muted)]">
+                    <tr>
+                        <th class="p-3 font-semibold">Date</th>
+                        <th class="p-3 font-semibold">Description</th>
+                        <th class="p-3 font-semibold">Client</th>
+                        <th class="p-3 font-semibold">Amount</th>
+                        <th class="p-3 font-semibold">Quarter</th>
+                        <th class="p-3 font-semibold"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in income_list %}
+                    <tr class="border-b border-[color:var(--color-border)]">
+                        <td class="p-3">{{ item.date }}</td>
+                        <td class="p-3">{{ item.description }}</td>
+                        <td class="p-3">{{ item.client_name }}</td>
+                        <td class="p-3 font-semibold text-green-700">£{{ item.amount }}</td>
+                        <td class="p-3">{{ item.quarter }}</td>
+                        <td class="p-3 text-right">
+                            <a href="{% url 'bookkeeping:income_detail' item.id %}"
+                               class="text-[color:var(--color-accent)] hover:underline">
+                                View
+                            </a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="6" class="p-4 text-center text-[color:var(--color-text-muted)]">
+                            No income records found.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        {% include "partials/_pagination.html" %}
+    </div>
+</div>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const searchInput = document.querySelector("input[name='search']");
+    if (!searchInput) return;
+
+    const table = document.querySelector("table");
+    const rows = table.querySelectorAll("tbody tr");
+
+    searchInput.addEventListener("input", function () {
+        const value = this.value.toLowerCase();
+
+        rows.forEach((row) => {
+            const text = row.innerText.toLowerCase();
+            row.style.display = text.includes(value) ? "" : "none";
+        });
+    });
+});
+</script>
+
+{% endblock %}

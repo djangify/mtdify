@@ -1,0 +1,63 @@
+<footer class="bg-[color:var(--color-primary-contrast)] border-t border-[color:var(--color-border)] mt-16">
+    <div class="max-w-7xl mx-auto px-4 py-10">
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+
+            <!-- Section 1: Product -->
+            <div>
+                <h3 class="font-semibold text-[color:var(--color-text)] mb-3">MTDify Local Edition</h3>
+                <ul class="space-y-2 text-sm">
+                    <li><a href="{% url 'home' %}" class="hover:text-[color:var(--color-accent)]">Home</a></li>
+                    <li><a href="{% url 'businesses:business_list' %}" class="hover:text-[color:var(--color-accent)]">Business</a></li>
+                    <li><a href="{% url 'login' %}" class="hover:text-[color:var(--color-accent)]">Login</a></li>
+
+                    
+                </ul>
+            </div>
+
+            <!-- Section 2: Documentation -->
+            <div>
+                <h3 class="font-semibold text-[color:var(--color-text)] mb-3">Documentation</h3>
+                <ul class="space-y-2 text-sm">
+                    <li><a href="https://mtdify.uk/docs/installation-guide/" class="hover:text-[color:var(--color-accent)]">Installation Guide</a></li>
+                    <li><a href="https://mtdify.uk/docs/usage-guide-local-edition/" class="hover:text-[color:var(--color-accent)]">User Manual</a></li>
+                    <li><a href="https://mtdify.uk/docs/release-notes-local-edition/" class="hover:text-[color:var(--color-accent)]">Release Notes</a></li>
+
+                    <!-- MTD Guide - useful educational link -->
+                    <li>
+                        <a href="/making-tax-digital"
+                           class="hover:text-[color:var(--color-accent)]">
+                            Making Tax Digital Guide
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Section 3: Legal -->
+            <div>
+                <h3 class="font-semibold text-[color:var(--color-text)] mb-3">Legal</h3>
+                <ul class="space-y-2 text-sm">
+                    <li><a href="#" class="hover:text-[color:var(--color-accent)]">Privacy Policy</a></li>
+                    <li><a href="#" class="hover:text-[color:var(--color-accent)]">Terms & Conditions</a></li>
+                    <li><a href="#" class="hover:text-[color:var(--color-accent)]">Offline Use Disclaimer</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="border-t border-[color:var(--color-border)] mt-10 pt-6 text-center text-xs text-[color:var(--color-text-muted)]">
+            MTDify Local Edition v{{ MTDIFY_VERSION }}
+            . A bookkeeping tool for UK sole traders and self-employed.  
+            <br>
+            <p class="mt-4 text-center text-xs">
+                Designed &amp; maintained via 
+                <a href="https://www.djangify.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Open Djangify website in a new tab">
+                Djangify
+                </a>
+            </p>
+        </div>
+
+    </div>
+</footer>

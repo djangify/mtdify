@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="min-h-screen bg-[color:var(--color-primary-contrast)]">
+    <div class="max-w-4xl mx-auto px-4 py-10">
+
+        <div class="mb-8">
+            <h1 class="text-2xl font-bold text-[color:var(--color-text)] mb-2">Income Details</h1>
+            <div class="w-16 h-1 bg-[color:var(--color-accent)]"></div>
+            <p class="text-lg text-[color:var(--color-text-muted)] mt-4">{{ income.description }}</p>
+        </div>
+
+        <!-- Details Card -->
+        <div class="bg-[color:var(--color-bg)] border border-[color:var(--color-border)] rounded-lg shadow-sm">
+
+            <div class="p-6 space-y-4">
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <p class="text-sm font-semibold text-[color:var(--color-text-muted)] mb-1">Transaction Date</p>
+                        <p class="text-base text-[color:var(--color-text)]">{{ income.date }}</p>
+                    </div>
+
+                    <div>
+                        <p class="text-sm font-semibold text-[color:var(--color-text-muted)] mb-1">Tax Quarter</p>
+                        <p class="text-base text-[color:var(--color-text)]">{{ income.quarter }}</p>
+                    </div>
+                </div>
+
+                <div>
+                    <p class="text-sm font-semibold text-[color:var(--color-text-muted)] mb-1">Description</p>
+                    <p class="text-base text-[color:var(--color-text)]">{{ income.description }}</p>
+                </div>
+
+                <div>
+                    <p class="text-sm font-semibold text-[color:var(--color-text-muted)] mb-1">Category</p>
+                    <p class="text-base text-[color:var(--color-text)]">{{ income.category.name }}</p>
+                </div>
+
+                <div>
+                    <p class="text-sm font-semibold text-[color:var(--color-text-muted)] mb-1">Client/Customer</p>
+                    <p class="text-base text-[color:var(--color-text)]">
+                        {% if income.client_name %}
+                            {{ income.client_name }}
+                        {% else %}
+                            <span class="text-[color:var(--color-text-muted)] italic">Not specified</span>
+                        {% endif %}
+                    </p>
+                </div>
+
+                <div>
+                    <p class="text-sm font-semibold text-[color:var(--color-text-muted)] mb-1">Invoice Number</p>
+                    <p class="text-base text-[color:var(--color-text)]">
+                        {% if income.invoice_number %}
+                            {{ income.invoice_number }}
+                        {% else %}
+                            <span class="italic text-[color:var(--color-text-muted)]">Not specified</span>
+                        {% endif %}
+                    </p>
+                </div>
+
+                <div class="bg-[color:var(--color-bg-muted)] border border-[color:var(--color-border)] rounded-lg p-4 mt-4">
+                    <h3 class="text-sm font-bold text-[color:var(--color-text)] mb-4">Financial Details</h3>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <p class="text-sm font-semibold text-[color:var(--color-text-muted)] mb-1">Amount</p>
+                            <p class="text-2xl font-bold text-green-700">£{{ income.amount }}</p>
+                        </div>
+
+                        <div>
+                            <p class="text-sm font-semibold text-[color:var(--color-text-muted)] mb-1">Tax Period</p>
+                            <p class="text-base text-[color:var(--color-text)]">{{ income.quarter }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                {% if income.notes %}
+                <div class="mt-4">
+                    <p class="text-sm font-semibold text-[color:var(--color-text-muted)] mb-1">Notes</p>
+                    <p class="text-base text-[color:var(--color-text)] bg-[color:var(--color-bg-muted)] p-3 rounded border border-[color:var(--color-border)]">
+                        {{ income.notes }}
+                    </p>
+                </div>
+                {% endif %}
+
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="bg-[color:var(--color-bg-muted)] px-6 py-4 border-t border-[color:var(--color-border)] rounded-b-lg">
+                <div class="flex items-center gap-4">
+
+                    <a href="{% url 'bookkeeping:income_edit' income.pk %}"
+                       class="px-6 py-2 bg-[color:var(--color-primary)] text-white
+                              hover:bg-[color:var(--color-accent)] rounded transition">
+                        Edit Income
+                    </a>
+
+                    <a href="{% url 'bookkeeping:income_confirm_delete' income.pk %}"
+                       class="px-6 py-2 border border-red-600 text-red-600
+                              hover:bg-red-600 hover:text-white rounded transition">
+                        Delete Income
+                    </a>
+
+                    <a href="{% url 'bookkeeping:income_list' %}"
+                       class="px-6 py-2 border border-[color:var(--color-border)]
+                              text-[color:var(--color-text)] hover:bg-[color:var(--color-bg)] rounded transition">
+                        Back to Income
+                    </a>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}

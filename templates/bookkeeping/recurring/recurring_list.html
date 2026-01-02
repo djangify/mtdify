@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="min-h-screen bg-[color:var(--color-primary-contrast)]">
+    <div class="max-w-5xl mx-auto px-4 py-10">
+
+        <div class="mb-8 flex items-center justify-between">
+            <div>
+                <h1 class="text-2xl font-bold text-[color:var(--color-text)] mb-2">
+                    Recurring Entries
+                </h1>
+                <div class="w-16 h-1 bg-[color:var(--color-accent)]"></div>
+            </div>
+
+            <a href="{% url 'bookkeeping:recurring_create' %}"
+               class="px-6 py-2 bg-[color:var(--color-primary)] text-white rounded hover:bg-[color:var(--color-accent)] transition">
+                Add Recurring Entry
+            </a>
+        </div>
+
+        {% if recurring_list %}
+        <div class="bg-[color:var(--color-bg)] border border-[color:var(--color-border)] rounded-lg shadow-sm p-6">
+            <table class="w-full border-collapse">
+                <thead>
+                    <tr class="text-left text-[color:var(--color-text-muted)] text-sm">
+                        <th class="pb-3">Type</th>
+                        <th class="pb-3">Category</th>
+                        <th class="pb-3">Description</th>
+                        <th class="pb-3">Amount</th>
+                        <th class="pb-3">Day</th>
+                        <th class="pb-3">Active</th>
+                        <th class="pb-3"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for entry in recurring_list %}
+                    <tr class="border-t border-[color:var(--color-border)]">
+                        <td class="py-3">{{ entry.entry_type|capfirst }}</td>
+                        <td class="py-3">{{ entry.category.name }}</td>
+                        <td class="py-3">{{ entry.description }}</td>
+                        <td class="py-3">£{{ entry.amount }}</td>
+                        <td class="py-3">{{ entry.day_of_month }}</td>
+                        <td class="py-3">
+                            {% if entry.is_active %}
+                                <span class="text-green-700">Yes</span>
+                            {% else %}
+                                <span class="text-red-700">No</span>
+                            {% endif %}
+                        </td>
+                        <td class="py-3 text-right">
+                            <a href="{% url 'bookkeeping:recurring_edit' entry.pk %}"
+                               class="text-[color:var(--color-primary)] hover:underline">Edit</a>
+
+                            <span class="mx-2 text-[color:var(--color-border)]">|</span>
+
+                            <a href="{% url 'bookkeeping:recurring_delete' entry.pk %}"
+                               class="text-red-600 hover:underline">Delete</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <!-- Pagination -->
+            <div class="mt-6">
+                {% include "partials/_pagination.html" %}
+
+            </div>
+        </div>
+        {% else %}
+        <p class="text-[color:var(--color-text-muted)] text-lg mt-8">
+            No recurring entries found.
+        </p>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,157 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="min-h-screen bg-[color:var(--color-primary-contrast)]">
+    <div class="max-w-4xl mx-auto px-4 py-10">
+
+        <!-- Page Header -->
+        <div class="mb-8">
+            <h1 class="text-2xl font-bold text-[color:var(--color-text)] mb-2">
+                Edit Business
+            </h1>
+            <div class="w-16 h-1 bg-[color:var(--color-accent)]"></div>
+        </div>
+
+        <form method="post"
+              class="bg-[color:var(--color-bg)] border border-[color:var(--color-border)] rounded-lg shadow-sm">
+            {% csrf_token %}
+
+            <div class="p-6 space-y-6">
+
+                {% if form.non_field_errors %}
+                <div class="bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded">
+                    {{ form.non_field_errors }}
+                </div>
+                {% endif %}
+
+                <!-- Business Information -->
+                <div>
+                    <h2 class="text-lg font-semibold text-[color:var(--color-text)] mb-4 pb-2 border-b border-[color:var(--color-border)]">
+                        Business Information
+                    </h2>
+
+                    <!-- Business Name -->
+                    <div>
+                        <label class="block text-sm font-semibold text-[color:var(--color-text)] mb-2">
+                            Business Name <span class="text-red-600">*</span>
+                        </label>
+                        {{ form.name }}
+                        {% if form.name.errors %}
+                            <p class="text-sm text-red-600">{{ form.name.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+
+                    <!-- Trade Name -->
+                    <div class="mt-6">
+                        <label class="block text-sm font-semibold text-[color:var(--color-text)] mb-2">
+                            Trading Name
+                        </label>
+                        {{ form.trade_name }}
+                        {% if form.trade_name.errors %}
+                            <p class="text-sm text-red-600">{{ form.trade_name.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+
+                    <!-- Business Type -->
+                    <div class="mt-6">
+                        <label class="block text-sm font-semibold text-[color:var(--color-text)] mb-2">
+                            Business Type <span class="text-red-600">*</span>
+                        </label>
+                        {{ form.business_type }}
+                        {% if form.business_type.errors %}
+                            <p class="text-sm text-red-600">{{ form.business_type.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Optional HMRC ID -->
+                <div>
+                    <h2 class="text-lg font-semibold text-[color:var(--color-text)] mb-4 pb-2 border-b border-[color:var(--color-border)]">
+                        HMRC Business ID (Optional)
+                    </h2>
+
+                    <div>
+                        <label class="block text-sm font-semibold text-[color:var(--color-text)] mb-2">
+                            HMRC Business ID
+                        </label>
+                        {{ form.hmrc_business_id }}
+                        {% if form.hmrc_business_id.errors %}
+                            <p class="text-sm text-red-600">{{ form.hmrc_business_id.errors.0 }}</p>
+                        {% else %}
+                            <p class="text-xs text-[color:var(--color-text-muted)] mt-1 italic">
+                                e.g., XAIS12345678901 (optional)
+                            </p>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Accounting Details -->
+                <div>
+                    <h2 class="text-lg font-semibold text-[color:var(--color-text)] mb-4 pb-2 border-b border-[color:var(--color-border)]">
+                        Accounting Details
+                    </h2>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                        <!-- Start -->
+                        <div>
+                            <label class="block text-sm font-semibold text-[color:var(--color-text)] mb-2">
+                                Accounting Period Start <span class="text-red-600">*</span>
+                            </label>
+                            {{ form.accounting_period_start }}
+                            <p class="text-xs text-[color:var(--color-text-muted)] mt-1 italic">
+                                Usually 6 April
+                            </p>
+                            {% if form.accounting_period_start.errors %}
+                                <p class="text-sm text-red-600">{{ form.accounting_period_start.errors.0 }}</p>
+                            {% endif %}
+                        </div>
+
+                        <!-- End -->
+                        <div>
+                            <label class="block text-sm font-semibold text-[color:var(--color-text)] mb-2">
+                                Accounting Period End <span class="text-red-600">*</span>
+                            </label>
+                            {{ form.accounting_period_end }}
+                            <p class="text-xs text-[color:var(--color-text-muted)] mt-1 italic">
+                                Usually 5 April
+                            </p>
+                            {% if form.accounting_period_end.errors %}
+                                <p class="text-sm text-red-600">{{ form.accounting_period_end.errors.0 }}</p>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <!-- Method -->
+                    <div class="mt-6">
+                        <label class="block text-sm font-semibold text-[color:var(--color-text)] mb-2">
+                            Accounting Method <span class="text-red-600">*</span>
+                        </label>
+                        {{ form.cash_or_accruals }}
+                        {% if form.cash_or_accruals.errors %}
+                            <p class="text-sm text-red-600">{{ form.cash_or_accruals.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Actions -->
+            <div class="bg-[color:var(--color-bg-muted)] px-6 py-4 border-t border-[color:var(--color-border)]
+                        flex items-center justify-between rounded-b-lg">
+
+                <button type="submit"
+                        class="px-6 py-2 bg-[color:var(--color-primary)] text-white rounded hover:bg-[color:var(--color-primary-hover)]">
+                    Save Changes
+                </button>
+
+                <a href="{% url 'businesses:business_detail' business.id %}"
+                   class="px-6 py-2 text-[color:var(--color-text)] border rounded hover:bg-[color:var(--color-bg-muted)]">
+                    Cancel
+                </a>
+            </div>
+        </form>
+
+    </div>
+</div>
+{% endblock %}

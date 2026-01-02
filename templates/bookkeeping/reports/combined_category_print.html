@@ -1,0 +1,37 @@
+{% extends "bookkeeping/reports/base_print.html" %}
+
+{% block title %}Combined Category Totals{% endblock %}
+{% block report_title %}Combined Income & Expense Totals by Category{% endblock %}
+
+{% block content %}
+
+<table class="report-table">
+    <thead>
+        <tr>
+            <th>Category</th>
+            <th class="text-right">Income</th>
+            <th class="text-right">Expenses</th>
+            <th class="text-right">Net</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for row in rows %}
+        <tr>
+            <td>{{ row.category }}</td>
+            <td class="text-right">£{{ row.income|floatformat:2 }}</td>
+            <td class="text-right">£{{ row.expenses|floatformat:2 }}</td>
+            <td class="text-right {% if row.net >= 0 %}amount-positive{% else %}amount-negative{% endif %}">
+                £{{ row.net|floatformat:2 }}
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="4" class="text-center">No category data available</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+
+</table>
+
+{% endblock %}

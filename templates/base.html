@@ -1,0 +1,66 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en-gb">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{% block title %}Manage Transactions Daily Bookkeeping Software{% endblock %}</title>
+
+    <!-- Tailwind CSS -->
+    <link rel="stylesheet" href="{% static 'css/output.css' %}">
+
+    {% block head %}{% endblock %}
+</head>
+
+<body>
+
+
+    <!-- ==========================
+         NAVBAR INCLUDE
+    =========================== -->
+    {% include "includes/navbar.html" %}
+
+    <!-- ==========================
+         MESSAGE SYSTEM
+    =========================== -->
+    {% if messages %}
+    <div id="messages-container"
+         class="fixed top-4 left-0 right-0 flex justify-center z-50 px-4 fade-transition">
+        <div class="space-y-2 w-full max-w-2xl">
+            {% for message in messages %}
+            <div class="px-4 py-3 rounded-md shadow text-white
+                        {% if message.tags == 'error' %} bg-red-600
+                        {% elif message.tags == 'warning' %} bg-yellow-600
+                        {% elif message.tags == 'success' %} bg-green-600
+                        {% else %} bg-[color:var(--color-primary)] {% endif %}">
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    <script>
+        setTimeout(() => {
+            const el = document.getElementById("messages-container");
+            if (el) { el.style.opacity = "0"; }
+        }, 3000);
+    </script>
+
+    <!-- ==========================
+         MAIN CONTENT
+    =========================== -->
+    <main class="flex-grow max-w-7xl mx-auto w-full px-5 py-10">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- ==========================
+         FOOTER INCLUDE
+    =========================== -->
+    {% include "includes/footer.html" %}
+
+    {% block scripts %}{% endblock %}
+
+</body>
+</html>

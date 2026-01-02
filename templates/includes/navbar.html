@@ -1,0 +1,280 @@
+<nav class="bg-[color:var(--color-primary)] text-[color:var(--color-primary-contrast)] shadow-sm overflow-visible">
+
+    <div class="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between overflow-visible">
+
+
+        <!-- Logo -->
+        <a href="{% url 'home' %}" class="text-xl font-semibold tracking-tight">
+            MTDify Local
+        </a>
+
+        <!-- Desktop Menu -->
+        <div class="hidden md:flex items-center space-x-8 text-sm font-medium">
+
+            <a href="{% url 'home' %}" class="hover:text-[color:var(--color-accent)] transition-colors">Home</a>
+
+            <!-- Desktop Dashboard Dropdown -->
+            <div class="relative" id="desktop-dashboard">
+                <button class="desktop-dropdown-btn hover:text-[color:var(--color-accent)] transition-colors flex items-center gap-1">
+                    Dashboard
+                    <svg class="w-4 h-4 dropdown-arrow transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                    </svg>
+                </button>
+
+                <div class="desktop-dropdown hidden absolute left-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">
+                    <a href="{% url 'dashboard' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors">
+                        Dashboard Home
+                    </a>
+                    <div class="border-t border-gray-100 my-1"></div>
+                    <a href="{% url 'bookkeeping:income_create' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors">
+                        Add Income
+                    </a>
+                    <a href="{% url 'bookkeeping:expense_create' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors">
+                        Add Expense
+                    </a>
+                    <a href="{% url 'bookkeeping:recurring_list' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors">
+                        Recurring Entries
+                    </a>
+                </div>
+            </div>
+
+            <!-- Desktop Business Dropdown -->
+            <div class="relative" id="desktop-business">
+                <button class="desktop-dropdown-btn hover:text-[color:var(--color-accent)] transition-colors flex items-center gap-1">
+                    Business
+                    <svg class="w-4 h-4 dropdown-arrow transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                    </svg>
+                </button>
+
+                <div class="desktop-dropdown hidden absolute left-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">
+                    <a href="{% url 'businesses:business_list' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors">
+                        Business Details
+                    </a>
+                    <div class="border-t border-gray-100 my-1"></div>
+                    <a href="{% url 'bookkeeping:income_export_csv' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors">
+                        Export Income
+                    </a>
+                    <a href="{% url 'bookkeeping:expense_export_csv' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors">
+                        Export Expenditure
+                    </a>
+                    <a href="{% url 'bookkeeping:yearly_profit_csv' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors">
+                        Profit Report
+                    </a>
+                </div>
+            </div>
+
+            <!-- Desktop Tax Year Dropdown -->
+            {% if user.is_authenticated and available_tax_years %}
+            <div class="relative" id="desktop-taxyear">
+                <button class="desktop-dropdown-btn hover:text-[color:var(--color-accent)] transition-colors flex items-center gap-1">
+                    <span class="font-semibold">{{ tax_year_short|default:"Year" }}</span>
+                    <svg class="w-4 h-4 dropdown-arrow transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                    </svg>
+                </button>
+
+                <div class="desktop-dropdown hidden absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">
+                    {% for year in available_tax_years %}
+                    <a href="{% url 'switch_tax_year' year %}"
+                       class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors 
+                              {% if year == selected_tax_year %}bg-gray-50 font-semibold{% endif %}">
+                        {{ year }}
+                        {% if year == selected_tax_year %}
+                        <span class="text-green-600 ml-2">✓</span>
+                        {% endif %}
+                    </a>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+
+            {% if user.is_authenticated %}
+                <a href="{% url 'logout' %}" class="hover:text-[color:var(--color-accent)] transition-colors">Logout</a>
+            {% else %}
+                <a href="{% url 'login' %}" class="hover:text-[color:var(--color-accent)] transition-colors">Login</a>
+            {% endif %}
+
+        </div>
+
+        <!-- Mobile Hamburger -->
+        <button id="mobile-menu-toggle"
+            class="md:hidden text-2xl focus:outline-none hover:text-[color:var(--color-accent)] transition-colors"
+            aria-label="Toggle menu">
+            ☰
+        </button>
+    </div>
+
+    <!-- Mobile Menu (UNCHANGED) -->
+    <div id="mobile-menu" class="hidden md:hidden bg-[color:var(--color-primary)] px-6 pb-4 space-y-2">
+
+        <a href="{% url 'home' %}" class="block py-2 text-sm hover:text-[color:var(--color-accent)] transition-colors">Home</a>
+
+        <!-- Mobile Dashboard Section -->
+        <div class="border-t border-white/20 pt-2">
+            <button id="mobile-dashboard-toggle"
+                class="w-full flex items-center justify-between py-2 text-sm hover:text-[color:var(--color-accent)] transition-colors">
+                <span>Dashboard</span>
+                <svg class="w-4 h-4 transition-transform" id="mobile-dashboard-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                </svg>
+            </button>
+            <div id="mobile-dashboard-menu" class="hidden pl-4 space-y-1 mt-1">
+                <a href="{% url 'dashboard' %}" class="block py-1.5 text-sm hover:text-[color:var(--color-accent)] transition-colors">
+                    Dashboard Home
+                </a>
+                <a href="{% url 'bookkeeping:income_create' %}" class="block py-1.5 text-sm hover:text-[color:var(--color-accent)] transition-colors">
+                    Add Income
+                </a>
+                <a href="{% url 'bookkeeping:expense_create' %}" class="block py-1.5 text-sm hover:text-[color:var(--color-accent)] transition-colors">
+                    Add Expense
+                </a>
+                <a href="{% url 'bookkeeping:recurring_list' %}" class="block py-1.5 text-sm hover:text-[color:var(--color-accent)] transition-colors">
+                    Recurring Entries
+                </a>
+            </div>
+        </div>
+
+        <!-- Mobile Business Section -->
+        <div class="border-t border-white/20 pt-2">
+            <button id="mobile-business-toggle"
+                class="w-full flex items-center justify-between py-2 text-sm hover:text-[color:var(--color-accent)] transition-colors">
+                <span>Business</span>
+                <svg class="w-4 h-4 transition-transform" id="mobile-business-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                </svg>
+            </button>
+            <div id="mobile-business-menu" class="hidden pl-4 space-y-1 mt-1">
+                <a href="{% url 'businesses:business_list' %}" class="block py-1.5 text-sm hover:text-[color:var(--color-accent)] transition-colors">
+                    Business Details
+                </a>
+                <a href="{% url 'bookkeeping:income_export_csv' %}" class="block py-1.5 text-sm hover:text-[color:var(--color-accent)] transition-colors">
+                    Export Income
+                </a>
+                <a href="{% url 'bookkeeping:expense_export_csv' %}" class="block py-1.5 text-sm hover:text-[color:var(--color-accent)] transition-colors">
+                    Export Expenditure
+                </a>
+                <a href="{% url 'bookkeeping:yearly_profit_csv' %}" class="block py-1.5 text-sm hover:text-[color:var(--color-accent)] transition-colors">
+                    Profit Report
+                </a>
+            </div>
+        </div>
+
+        <!-- Mobile Tax Year Selector -->
+        {% if user.is_authenticated and available_tax_years %}
+        <div class="border-t border-white/20 pt-2">
+            <button id="mobile-taxyear-toggle"
+                class="w-full flex items-center justify-between py-2 text-sm hover:text-[color:var(--color-accent)] transition-colors">
+                <span>Tax Year: <span class="font-semibold">{{ tax_year_short|default:"Select" }}</span></span>
+                <svg class="w-4 h-4 transition-transform" id="mobile-taxyear-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                </svg>
+            </button>
+            <div id="mobile-taxyear-menu" class="hidden pl-4 space-y-1 mt-1">
+                {% for year in available_tax_years %}
+                <a href="{% url 'switch_tax_year' year %}"
+                   class="block py-1.5 text-sm rounded transition-colors
+                    {% if year == selected_tax_year %}bg-white/10 font-semibold{% else %}hover:bg-white/5{% endif %}">
+                    {{ year }}
+                    {% if year == selected_tax_year %}
+                    <span class="text-green-400">✓</span>
+                    {% endif %}
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+        {% if user.is_authenticated %}
+            <a href="{% url 'logout' %}" class="block py-2 text-sm hover:text-[color:var(--color-accent)] transition-colors border-t border-white/20 pt-2">Logout</a>
+        {% else %}
+            <a href="{% url 'login' %}" class="block py-2 text-sm hover:text-[color:var(--color-accent)] transition-colors border-t border-white/20 pt-2">Login</a>
+        {% endif %}
+
+    </div>
+
+</nav>
+
+<script>
+// ---------------------------
+// MOBILE MENU (UNCHANGED)
+// ---------------------------
+
+document.getElementById("mobile-menu-toggle").onclick = function () {
+    const menu = document.getElementById("mobile-menu");
+    menu.classList.toggle("hidden");
+};
+
+document.getElementById("mobile-dashboard-toggle").onclick = function () {
+    const menu = document.getElementById("mobile-dashboard-menu");
+    const icon = document.getElementById("mobile-dashboard-icon");
+    menu.classList.toggle("hidden");
+    icon.classList.toggle("rotate-180");
+};
+
+document.getElementById("mobile-business-toggle").onclick = function () {
+    const menu = document.getElementById("mobile-business-menu");
+    const icon = document.getElementById("mobile-business-icon");
+    menu.classList.toggle("hidden");
+    icon.classList.toggle("rotate-180");
+};
+
+const taxYearToggle = document.getElementById("mobile-taxyear-toggle");
+if (taxYearToggle) {
+    taxYearToggle.onclick = function () {
+        const menu = document.getElementById("mobile-taxyear-menu");
+        const icon = document.getElementById("mobile-taxyear-icon");
+        menu.classList.toggle("hidden");
+        icon.classList.toggle("rotate-180");
+    };
+}
+
+document.addEventListener('click', function(event) {
+    const mobileMenu = document.getElementById("mobile-menu");
+    const toggleButton = document.getElementById("mobile-menu-toggle");
+
+    if (!mobileMenu.contains(event.target) && !toggleButton.contains(event.target)) {
+        mobileMenu.classList.add("hidden");
+    }
+});
+
+window.addEventListener('resize', function() {
+    if (window.innerWidth >= 768) {
+        document.getElementById("mobile-menu").classList.add("hidden");
+    }
+});
+
+
+// ---------------------------
+// DESKTOP DROPDOWNS (NEW)
+// ---------------------------
+
+document.querySelectorAll(".desktop-dropdown-btn").forEach(btn => {
+    btn.addEventListener("click", function (e) {
+        e.stopPropagation();
+
+        const container = btn.closest("div[id^='desktop']");
+        const dropdown = container.querySelector(".desktop-dropdown");
+        const arrow = container.querySelector(".dropdown-arrow");
+
+        // close all others
+        document.querySelectorAll(".desktop-dropdown").forEach(menu => {
+            if (menu !== dropdown) menu.classList.add("hidden");
+        });
+        document.querySelectorAll(".dropdown-arrow").forEach(a => {
+            if (a !== arrow) a.classList.remove("rotate-180");
+        });
+
+        // toggle this one
+        dropdown.classList.toggle("hidden");
+        arrow.classList.toggle("rotate-180");
+    });
+});
+
+// close on outside click
+document.addEventListener("click", function() {
+    document.querySelectorAll(".desktop-dropdown").forEach(menu => menu.classList.add("hidden"));
+    document.querySelectorAll(".dropdown-arrow").forEach(a => a.classList.remove("rotate-180"));
+});
+</script>

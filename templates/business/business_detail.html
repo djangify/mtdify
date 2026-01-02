@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="min-h-screen bg-[color:var(--color-primary-contrast)]">
+    <div class="max-w-4xl mx-auto px-4 py-10">
+
+        <h1 class="text-3xl font-bold text-[color:var(--color-text)] mb-2">
+            {{ business.name }}
+        </h1>
+
+        {% if business.trade_name %}
+            <p class="text-md text-[color:var(--color-text-muted)]">{{ business.trade_name }}</p>
+        {% endif %}
+
+        <div class="w-16 h-1 bg-[color:var(--color-accent)] mb-8"></div>
+
+        <div class="bg-[color:var(--color-bg)] border border-[color:var(--color-border)] rounded-lg shadow-sm p-6 space-y-6">
+
+            <div>
+                <label class="text-sm font-semibold text-[color:var(--color-text-muted)]">Business Type</label>
+                <p class="text-lg text-[color:var(--color-text)]">{{ business.get_business_type_display }}</p>
+            </div>
+
+            {% if business.hmrc_business_id %}
+            <div>
+                <label class="text-sm font-semibold text-[color:var(--color-text-muted)]">HMRC Business ID</label>
+                <p class="text-lg text-[color:var(--color-text)]">{{ business.hmrc_business_id }}</p>
+            </div>
+            {% endif %}
+
+            <div>
+                <label class="text-sm font-semibold text-[color:var(--color-text-muted)]">Accounting Period</label>
+                <p class="text-[color:var(--color-text)]">
+                    {{ business.accounting_period_start|date:"d M Y" }}
+                    →
+                    {{ business.accounting_period_end|date:"d M Y" }}
+                </p>
+            </div>
+
+            <div>
+                <label class="text-sm font-semibold text-[color:var(--color-text-muted)]">Accounting Method</label>
+                <p class="text-[color:var(--color-text)]">{{ business.get_cash_or_accruals_display }}</p>
+            </div>
+
+        </div>
+
+        <div class="mt-8 flex gap-4">
+
+            <a href="{% url 'businesses:business_edit' business.id %}"
+               class="px-5 py-2 bg-[color:var(--color-primary)] text-white rounded-lg hover:bg-[color:var(--color-accent)] transition">
+                Edit
+            </a>
+
+            <a href="{% url 'businesses:business_confirm_delete' business.id %}"
+               class="px-5 py-2 border border-red-500 text-red-500 rounded-lg hover:bg-red-50 transition">
+                Delete
+            </a>
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}

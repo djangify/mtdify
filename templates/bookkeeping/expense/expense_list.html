@@ -1,0 +1,146 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="min-h-screen bg-[color:var(--color-primary-contrast)]">
+    <div class="max-w-7xl mx-auto px-4 py-10">
+
+        <div class="flex items-center justify-between mb-10">
+            <div>
+                <h1 class="text-2xl font-bold text-[color:var(--color-text)]">Expenses</h1>
+                {% if selected_tax_year %}
+                    <p class="text-sm text-[color:var(--color-text-muted)] mt-1">
+                        Viewing: {{ selected_tax_year }}
+                    </p>
+                {% endif %}
+
+                <div class="w-16 h-1 mt-2 bg-[color:var(--color-accent)]"></div>
+            </div>
+
+            <a href="{% url 'bookkeeping:expense_create' %}"
+               class="px-4 py-2 border border-[color:var(--color-accent)]
+                      hover:bg-[color:var(--color-primary)]
+                      hover:text-white transition rounded">
+                Add Expense
+            </a>
+        </div>
+
+        <form method="get" class="mb-6 grid grid-cols-1 md:grid-cols-4 gap-4">
+            <!-- Quick Search Label -->
+        
+            <input type="text" name="search" value="{{ request.GET.search }}"
+                placeholder="Search description or supplier"
+                class="border p-2 w-full bg-[color:var(--color-bg)] text-[color:var(--color-text)]">
+            
+
+            <select name="quarter" class="border p-2 bg-[color:var(--color-bg)]">
+                <option value="">All Quarters</option>
+                {% for q in quarters %}
+                <option value="{{ q }}" {% if request.GET.quarter == q %}selected{% endif %}>
+                    {{ q }}
+                </option>
+                {% endfor %}
+            </select>
+
+            <select name="category" class="border p-2 bg-[color:var(--color-bg)]">
+                <option value="">All Categories</option>
+                {% for cat in expense_categories %}
+                <option value="{{ cat.id }}" {% if request.GET.category == cat.id|stringformat:'s' %}selected{% endif %}>
+                    {{ cat.name }}
+                </option>
+                {% endfor %}
+            </select>
+
+            <!-- ✅ EXPORT BUTTON INSERTED HERE -->
+            {% if request.GET.category %}
+                {% for cat in expense_categories %}
+                    {% if cat.id|stringformat:'s' == request.GET.category %}
+                        <a href="{% url 'bookkeeping:export_by_category' cat.slug %}"
+                           class="px-3 py-2 bg-green-600 text-white rounded hover:bg-green-700">
+                            Export Selected Category
+                        </a>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+            <!-- END EXPORT BUTTON -->
+
+            <button class="border px-4 py-2 border-[color:var(--color-accent)]
+                        hover:bg-[color:var(--color-primary)]
+                        hover:text-white transition rounded">
+                Apply Filters
+            </button>
+        </form>
+
+        <div class="overflow-x-auto bg-[color:var(--color-bg)] border border-[color:var(--color-border)] rounded">
+            <table class="min-w-full text-left">
+                <thead class="border-b border-[color:var(--color-border)] bg-[color:var(--color-bg-muted)]">
+                    <tr>
+                        <th class="p-3 font-semibold">Date</th>
+                        <th class="p-3 font-semibold">Description</th>
+                        <th class="p-3 font-semibold">Supplier</th>
+                        <th class="p-3 font-semibold">Net £</th>
+                        <th class="p-3 font-semibold">VAT</th>
+                        <th class="p-3 font-semibold">Receipt</th>
+                        <th class="p-3 font-semibold">Quarter</th>
+                        <th class="p-3"></th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for item in expense_list %}
+                    <tr class="border-b border-[color:var(--color-border)]">
+                        <td class="p-3">{{ item.date }}</td>
+                        <td class="p-3">{{ item.description }}</td>
+                        <td class="p-3">{{ item.supplier_name }}</td>
+
+                        <td class="p-3 font-semibold text-red-600">£{{ item.amount }}</td>
+                        <td class="p-3">£{{ item.vat_amount }} ({{ item.vat_rate }}%)</td>
+
+                        <td class="p-3">
+                            {% if item.receipt %}
+                                <span class="text-green-700 font-bold">✓</span>
+                            {% else %}
+                                <span class="text-[color:var(--color-text-muted)]">✗</span>
+                            {% endif %}
+                        </td>
+
+                        <td class="p-3">{{ item.quarter }}</td>
+
+                        <td class="p-3 text-right">
+                            <a href="{% url 'bookkeeping:expense_detail' item.id %}"
+                               class="text-[color:var(--color-accent)] hover:underline">View</a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="8" class="p-4 text-center text-[color:var(--color-text-muted)]">
+                            No expenses found.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        {% include "partials/_pagination.html" %}
+    </div>
+</div>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const searchInput = document.querySelector("input[name='search']");
+    if (!searchInput) return;
+
+    const table = document.querySelector("table");
+    const rows = table.querySelectorAll("tbody tr");
+
+    searchInput.addEventListener("input", function () {
+        const value = this.value.toLowerCase();
+
+        rows.forEach((row) => {
+            const text = row.innerText.toLowerCase();
+            row.style.display = text.includes(value) ? "" : "none";
+        });
+    });
+});
+</script>
+
+{% endblock %}
