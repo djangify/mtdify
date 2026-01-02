@@ -46,12 +46,12 @@
 
         <div class="mt-8 flex gap-4">
 
-            <a href="{% url 'businesses:business_edit' business.id %}"
+            <a href="{% url 'business:business_edit' business.id %}"
                class="px-5 py-2 bg-[color:var(--color-primary)] text-white rounded-lg hover:bg-[color:var(--color-accent)] transition">
                 Edit
             </a>
 
-            <a href="{% url 'businesses:business_confirm_delete' business.id %}"
+            <a href="{% url 'business:business_confirm_delete' business.id %}"
                class="px-5 py-2 border border-red-500 text-red-500 rounded-lg hover:bg-red-50 transition">
                 Delete
             </a>

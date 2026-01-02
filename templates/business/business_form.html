@@ -139,7 +139,7 @@
                         <p class="mt-1 text-sm text-red-600">{{ form.cash_or_accruals.errors.0 }}</p>
                         {% else %}
                         <p class="text-xs text-[color:var(--color-text-muted)] mt-1 italic">
-                            Most small businesses use cash basis.
+                            Most small business use cash basis.
                         </p>
                         {% endif %}
                     </div>
@@ -161,7 +161,7 @@
                         {% if object %}Update Business{% else %}Save Business{% endif %}
                     </button>
 
-                    <a href="{% url 'businesses:business_list' %}"
+                    <a href="{% url 'business:business_list' %}"
                        class="px-6 py-2 border border-[color:var(--color-border)]
                               text-[color:var(--color-text)]
                               hover:bg-[color:var(--color-bg-muted)]

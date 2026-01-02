@@ -10,8 +10,8 @@
         </h1>
         <p class="text-lg text-[color:var(--color-text-muted)] max-w-2xl mx-auto">
             
-            A lightweight, offline-first bookkeeping tool for UK sole traders and small businesses.
-            Your data stays on your device — no cloud, no SaaS, no third-party storage.
+            Manage Transactions Daily (MTD) is a lightweight, self-hosted bookkeeping tool for UK sole traders and the self employed.
+            You own your data and it stays on your own hosting.
         </p>
     </div>
 
@@ -40,7 +40,7 @@
             </p>
         </a>
 
-        <a href="{% url 'businesses:business_list' %}"
+        <a href="{% url 'business:business_list' %}"
            class="block bg-[color:var(--color-bg)] border border-[color:var(--color-border)] rounded-lg p-6 
                   hover:bg-[color:var(--color-bg-muted)] transition">
             <h3 class="text-xl font-semibold mb-2 text-[color:var(--color-text)]">
@@ -57,9 +57,8 @@
     <div class="bg-[color:var(--color-bg-muted)] border border-[color:var(--color-border)] rounded-lg p-8">
         <h2 class="text-2xl font-bold text-[color:var(--color-text)] mb-4">About This Edition</h2>
         <p class="text-[color:var(--color-text-muted)] leading-relaxed">
-            MTDify Local Edition is designed for users who prefer owning their own data and keeping it fully under
-            their control. There are no remote servers, no cloud accounts, and no automated submissions.
-            Everything is processed directly on your device using SQLite or PostgreSQL.
+            MTDify Self-Hosted Edition is designed for users who prefer owning their own data and keeping it fully under
+            their control. Everything is processed directly on your own hosting server (or I can host it for you) using a SQLite database.
         </p>
         <p class="text-[color:var(--color-text-muted)] mt-4 leading-relaxed">
             This edition is ideal for solo developers, privacy-focused users, and anyone who wants a

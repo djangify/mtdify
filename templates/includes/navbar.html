@@ -5,7 +5,7 @@
 
         <!-- Logo -->
         <a href="{% url 'home' %}" class="text-xl font-semibold tracking-tight">
-            MTDify Local
+            MTDify.uk
         </a>
 
         <!-- Desktop Menu -->
@@ -49,7 +49,7 @@
                 </button>
 
                 <div class="desktop-dropdown hidden absolute left-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">
-                    <a href="{% url 'businesses:business_list' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors">
+                    <a href="{% url 'business:business_list' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors">
                         Business Details
                     </a>
                     <div class="border-t border-gray-100 my-1"></div>
@@ -146,7 +146,7 @@
                 </svg>
             </button>
             <div id="mobile-business-menu" class="hidden pl-4 space-y-1 mt-1">
-                <a href="{% url 'businesses:business_list' %}" class="block py-1.5 text-sm hover:text-[color:var(--color-accent)] transition-colors">
+                <a href="{% url 'business:business_list' %}" class="block py-1.5 text-sm hover:text-[color:var(--color-accent)] transition-colors">
                     Business Details
                 </a>
                 <a href="{% url 'bookkeeping:income_export_csv' %}" class="block py-1.5 text-sm hover:text-[color:var(--color-accent)] transition-colors">
