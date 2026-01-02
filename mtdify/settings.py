@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     # Local apps
     "accounts",
     "bookkeeping",
+    "business",
 ]
 
 AUTH_USER_MODEL = "accounts.User"
