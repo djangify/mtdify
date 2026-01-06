@@ -13,7 +13,8 @@
 
             <a href="{% url 'home' %}" class="hover:text-[color:var(--color-accent)] transition-colors">Home</a>
 
-            <!-- Desktop Dashboard Dropdown -->
+            {% if user.is_authenticated %}
+            <!-- Desktop Dashboard Dropdown (only shown when logged in) -->
             <div class="relative" id="desktop-dashboard">
                 <button class="desktop-dropdown-btn hover:text-[color:var(--color-accent)] transition-colors flex items-center gap-1">
                     Dashboard
@@ -39,7 +40,7 @@
                 </div>
             </div>
 
-            <!-- Desktop Business Dropdown -->
+            <!-- Desktop Business Dropdown (only shown when logged in) -->
             <div class="relative" id="desktop-business">
                 <button class="desktop-dropdown-btn hover:text-[color:var(--color-accent)] transition-colors flex items-center gap-1">
                     Business
@@ -65,8 +66,8 @@
                 </div>
             </div>
 
-            <!-- Desktop Tax Year Dropdown -->
-            {% if user.is_authenticated and available_tax_years %}
+            <!-- Desktop Tax Year Dropdown (only shown when logged in with tax years) -->
+            {% if available_tax_years %}
             <div class="relative" id="desktop-taxyear">
                 <button class="desktop-dropdown-btn hover:text-[color:var(--color-accent)] transition-colors flex items-center gap-1">
                     <span class="font-semibold">{{ tax_year_short|default:"Year" }}</span>
@@ -89,6 +90,7 @@
                 </div>
             </div>
             {% endif %}
+            {% endif %}
 
             {% if user.is_authenticated %}
                 <a href="{% url 'logout' %}" class="hover:text-[color:var(--color-accent)] transition-colors">Logout</a>
@@ -106,12 +108,13 @@
         </button>
     </div>
 
-    <!-- Mobile Menu (UNCHANGED) -->
+    <!-- Mobile Menu -->
     <div id="mobile-menu" class="hidden md:hidden bg-[color:var(--color-primary)] px-6 pb-4 space-y-2">
 
         <a href="{% url 'home' %}" class="block py-2 text-sm hover:text-[color:var(--color-accent)] transition-colors">Home</a>
 
-        <!-- Mobile Dashboard Section -->
+        {% if user.is_authenticated %}
+        <!-- Mobile Dashboard Section (only shown when logged in) -->
         <div class="border-t border-white/20 pt-2">
             <button id="mobile-dashboard-toggle"
                 class="w-full flex items-center justify-between py-2 text-sm hover:text-[color:var(--color-accent)] transition-colors">
@@ -136,7 +139,7 @@
             </div>
         </div>
 
-        <!-- Mobile Business Section -->
+        <!-- Mobile Business Section (only shown when logged in) -->
         <div class="border-t border-white/20 pt-2">
             <button id="mobile-business-toggle"
                 class="w-full flex items-center justify-between py-2 text-sm hover:text-[color:var(--color-accent)] transition-colors">
@@ -161,8 +164,8 @@
             </div>
         </div>
 
-        <!-- Mobile Tax Year Selector -->
-        {% if user.is_authenticated and available_tax_years %}
+        <!-- Mobile Tax Year Selector (only shown when logged in with tax years) -->
+        {% if available_tax_years %}
         <div class="border-t border-white/20 pt-2">
             <button id="mobile-taxyear-toggle"
                 class="w-full flex items-center justify-between py-2 text-sm hover:text-[color:var(--color-accent)] transition-colors">
@@ -185,6 +188,7 @@
             </div>
         </div>
         {% endif %}
+        {% endif %}
 
         {% if user.is_authenticated %}
             <a href="{% url 'logout' %}" class="block py-2 text-sm hover:text-[color:var(--color-accent)] transition-colors border-t border-white/20 pt-2">Logout</a>
@@ -198,7 +202,7 @@
 
 <script>
 // ---------------------------
-// MOBILE MENU (UNCHANGED)
+// MOBILE MENU
 // ---------------------------
 
 document.getElementById("mobile-menu-toggle").onclick = function () {
@@ -206,19 +210,26 @@ document.getElementById("mobile-menu-toggle").onclick = function () {
     menu.classList.toggle("hidden");
 };
 
-document.getElementById("mobile-dashboard-toggle").onclick = function () {
-    const menu = document.getElementById("mobile-dashboard-menu");
-    const icon = document.getElementById("mobile-dashboard-icon");
-    menu.classList.toggle("hidden");
-    icon.classList.toggle("rotate-180");
-};
+// Only attach handlers if elements exist (they won't for logged-out users)
+const mobileDashboardToggle = document.getElementById("mobile-dashboard-toggle");
+if (mobileDashboardToggle) {
+    mobileDashboardToggle.onclick = function () {
+        const menu = document.getElementById("mobile-dashboard-menu");
+        const icon = document.getElementById("mobile-dashboard-icon");
+        menu.classList.toggle("hidden");
+        icon.classList.toggle("rotate-180");
+    };
+}
 
-document.getElementById("mobile-business-toggle").onclick = function () {
-    const menu = document.getElementById("mobile-business-menu");
-    const icon = document.getElementById("mobile-business-icon");
-    menu.classList.toggle("hidden");
-    icon.classList.toggle("rotate-180");
-};
+const mobileBusinessToggle = document.getElementById("mobile-business-toggle");
+if (mobileBusinessToggle) {
+    mobileBusinessToggle.onclick = function () {
+        const menu = document.getElementById("mobile-business-menu");
+        const icon = document.getElementById("mobile-business-icon");
+        menu.classList.toggle("hidden");
+        icon.classList.toggle("rotate-180");
+    };
+}
 
 const taxYearToggle = document.getElementById("mobile-taxyear-toggle");
 if (taxYearToggle) {
@@ -247,7 +258,7 @@ window.addEventListener('resize', function() {
 
 
 // ---------------------------
-// DESKTOP DROPDOWNS (NEW)
+// DESKTOP DROPDOWNS
 // ---------------------------
 
 document.querySelectorAll(".desktop-dropdown-btn").forEach(btn => {

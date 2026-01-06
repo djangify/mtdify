@@ -141,9 +141,9 @@ MEDIA_ROOT = BASE_DIR / "data" / "media"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # Authentication URLs
-LOGIN_URL = "/accounts/login/"
+LOGIN_URL = "/login/"
+LOGOUT_REDIRECT_URL = "/login/"
 LOGIN_REDIRECT_URL = "/dashboard/"
-LOGOUT_REDIRECT_URL = "/accounts/login/"
 
 # Email (console for development)
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
