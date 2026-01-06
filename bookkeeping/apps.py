@@ -10,23 +10,36 @@ class BookkeepingConfig(AppConfig):
     default_auto_field = "django.db.models.BigAutoField"
     name = "bookkeeping"
 
-    def get_user_data_dir(self):
+    def get_database_path(self):
         """
-        Return the directory where persistent user data should be stored.
+        Return the path to the SQLite database file.
 
-        - When running as a PyInstaller .exe:
-            Return the folder where the .exe is located.
-        - When running in development:
-            Return Django's BASE_DIR.
+        Uses Django's settings to get the actual database location,
+        which works correctly for both PyInstaller and Docker/self-hosted.
         """
-        if hasattr(sys, "_MEIPASS") or getattr(sys, "frozen", False):
-            # Running as compiled EXE - return folder containing the .exe
-            return Path(sys.executable).parent
-
-        # Running in development - return project root
         from django.conf import settings
 
-        return settings.BASE_DIR
+        # Get database path from Django settings
+        db_settings = settings.DATABASES.get("default", {})
+        db_name = db_settings.get("NAME")
+
+        if db_name:
+            return Path(db_name)
+
+        # Fallback for legacy PyInstaller builds
+        if hasattr(sys, "_MEIPASS") or getattr(sys, "frozen", False):
+            return Path(sys.executable).parent / "db.sqlite3"
+
+        return settings.BASE_DIR / "db.sqlite3"
+
+    def get_backup_dir(self):
+        """
+        Return the directory where backups should be stored.
+
+        Places backups in a 'backups' folder alongside the database.
+        """
+        db_path = self.get_database_path()
+        return db_path.parent / "backups"
 
     def ready(self):
         """
@@ -98,27 +111,25 @@ class BookkeepingConfig(AppConfig):
         Already protected from running during PyInstaller by ready().
         """
         try:
-            USER_DIR = self.get_user_data_dir()
+            DB_PATH = self.get_database_path()
+            BACKUP_DIR = self.get_backup_dir()
 
-            DB_PATH = USER_DIR / "db.sqlite3"
-            BACKUP_DIR = USER_DIR / "backups"
-
-            BACKUP_DIR.mkdir(exist_ok=True)
+            BACKUP_DIR.mkdir(parents=True, exist_ok=True)
 
             if not DB_PATH.exists():
-                print("⚠️  No database file found. Backup skipped.")
+                print(f"⚠️ No database file found at {DB_PATH}. Backup skipped.")
                 return
 
-            # ✅ FIX: Check if database is empty before backing up
+            # Check if database is empty before backing up
             if DB_PATH.stat().st_size == 0:
-                print("⚠️  Database file is empty (0 KB). Backup skipped.")
+                print("Database file is empty (0 KB). Backup skipped.")
                 return
 
             timestamp = datetime.now().strftime("%Y-%m-%d")
             backup_file = BACKUP_DIR / f"db-{timestamp}.sqlite3"
 
             if backup_file.exists():
-                print(f"✅ Backup already exists for today: {backup_file.name}")
+                print(f"Backup already exists for today: {backup_file.name}")
                 return
 
             shutil.copy(DB_PATH, backup_file)
@@ -140,7 +151,7 @@ class BookkeepingConfig(AppConfig):
 
                 if file_date < cutoff_date:
                     backup_file.unlink()
-                    print(f"🗑️  Deleted old backup: {backup_file.name}")
+                    print(f"Deleted old backup: {backup_file.name}")
 
             except Exception:
                 continue
