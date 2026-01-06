@@ -80,7 +80,7 @@
         <div class="bg-[color:var(--color-bg)] border border-[color:var(--color-border)]
                     rounded-xl p-6 shadow-sm">
             <p class="text-sm text-[color:var(--color-text-muted)]">Quarter Income</p>
-            <p class="text-3xl font-bold">£{{ quarter_income|intcomma }}</p>
+            <p class="text-3xl font-bold">£{{ quarter_income|floatformat:2|intcomma }}</p>
             <p class="text-xs text-[color:var(--color-text-muted)] mt-1">
                 Quarter: {{ current_quarter }}
             </p>
@@ -90,7 +90,7 @@
         <div class="bg-[color:var(--color-bg)] border border-[color:var(--color-border)]
                     rounded-xl p-6 shadow-sm">
             <p class="text-sm text-[color:var(--color-text-muted)]">Quarter Expenses</p>
-            <p class="text-3xl font-bold">£{{ quarter_expenses|intcomma }}</p>
+            <p class="text-3xl font-bold">£{{ quarter_expenses|floatformat:2|intcomma }}</p>
             <p class="text-xs text-[color:var(--color-text-muted)] mt-1">
                 Quarter: {{ current_quarter }}
             </p>
@@ -101,7 +101,7 @@
                     rounded-xl p-6 shadow-sm">
             <p class="text-sm text-[color:var(--color-text-muted)]">Quarter Profit</p>
             <p class="text-3xl font-bold {% if quarter_profit >= 0 %}text-green-700{% else %}text-red-600{% endif %}">
-                £{{ quarter_profit|intcomma }}
+                £{{ quarter_profit|floatformat:2|intcomma  }}
             </p>
             <p class="text-xs text-[color:var(--color-text-muted)] mt-1">Income – Expenses</p>
         </div>
@@ -117,7 +117,7 @@
         <div class="bg-[color:var(--color-bg)] border border-[color:var(--color-border)]
                     rounded-xl p-6 shadow-sm">
             <p class="text-sm text-[color:var(--color-text-muted)]">Total Income</p>
-            <p class="text-3xl font-bold">£{{ total_income|intcomma }}</p>
+            <p class="text-3xl font-bold">£{{ total_income|floatformat:2|intcomma }}</p>
             <p class="text-xs text-[color:var(--color-text-muted)] mt-1">
                 Tax Year: {{ tax_year }}
             </p>
@@ -127,7 +127,7 @@
         <div class="bg-[color:var(--color-bg)] border border-[color:var(--color-border)]
                     rounded-xl p-6 shadow-sm">
             <p class="text-sm text-[color:var(--color-text-muted)]">Total Expenses</p>
-            <p class="text-3xl font-bold">£{{ total_expenses|intcomma }}</p>
+            <p class="text-3xl font-bold">£{{ total_expenses|floatformat:2|intcomma }}</p>
             <p class="text-xs text-[color:var(--color-text-muted)] mt-1">
                 Tax Year: {{ tax_year }}
             </p>
@@ -138,7 +138,7 @@
                     rounded-xl p-6 shadow-sm">
             <p class="text-sm text-[color:var(--color-text-muted)]">YTD Profit</p>
             <p class="text-3xl font-bold {% if ytd_profit >= 0 %}text-green-700{% else %}text-red-600{% endif %}">
-                £{{ ytd_profit|intcomma }}
+                £{{ ytd_profit|floatformat:2|intcomma }}
             </p>
             <p class="text-xs text-[color:var(--color-text-muted)] mt-1">
                 Year-to-date ({{ tax_year }})

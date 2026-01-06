@@ -124,15 +124,11 @@ STATIC_URL = "/static/"
 STATICFILES_DIRS = [BASE_DIR / "static"]
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
-# Django 5.1+ storage configuration
-STORAGES = {
-    "default": {
-        "BACKEND": "django.core.files.storage.FileSystemStorage",
-    },
-    "staticfiles": {
-        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
-    },
-}
+
+# WhiteNoise Configuration
+STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
+# Cache static files for 1 year (immutable because of hashed filenames)
+WHITENOISE_MAX_AGE = 31536000  # 1 year in seconds
 
 # Media files (receipts etc)
 MEDIA_URL = "/media/"
