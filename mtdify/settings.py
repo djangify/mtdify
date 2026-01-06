@@ -145,7 +145,7 @@ LOGIN_REDIRECT_URL = "/dashboard/"
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
 # Version
-MTDIFY_VERSION = "2.0.0"
+MTDIFY_VERSION = "0.1.4"
 
 # Production security (only when DEBUG=False)
 if not DEBUG:
