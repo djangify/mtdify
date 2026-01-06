@@ -1,0 +1,131 @@
+{% extends "bookkeeping/reports/base_print.html" %}
+
+{% load humanize %}
+
+{% block title %}{{ category_name }} - {{ tax_year }}{% endblock %}
+
+{% block report_title %}{{ category_name }}{% endblock %}
+
+{% block extra_meta %}
+<p><strong>Tax Year:</strong> {{ tax_year }}</p>
+<p><strong>Total Expenses:</strong> {{ expenses|length }}</p>
+{% endblock %}
+
+{% block content %}
+
+{% if is_all_expenses and expenses_by_category %}
+    <!-- GROUPED BY CATEGORY VIEW -->
+    {% for cat_name, data in expenses_by_category.items %}
+    <div class="category-section" style="margin-bottom: 30px;">
+        <h2 style="font-size: 14pt; border-bottom: 2px solid #333; padding-bottom: 5px; margin-bottom: 15px;">
+            {{ cat_name }}
+        </h2>
+        
+        <table class="report-table">
+            <thead>
+                <tr>
+                    <th style="width: 12%;">Date</th>
+                    <th style="width: 35%;">Description</th>
+                    <th style="width: 20%;">Supplier</th>
+                    <th style="width: 15%;" class="text-right">Amount</th>
+                    <th style="width: 10%;" class="text-right">VAT</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for expense in data.items %}
+                <tr>
+                    <td>{{ expense.date|date:"d/m/Y" }}</td>
+                    <td>{{ expense.description }}</td>
+                    <td>{{ expense.supplier_name|default:"-" }}</td>
+                    <td class="text-right">£{{ expense.amount|floatformat:2|intcomma }}</td>
+                    <td class="text-right">£{{ expense.vat_amount|floatformat:2|intcomma }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+            <tfoot>
+                <tr class="summary-row">
+                    <td colspan="3"><strong>{{ cat_name }} Total</strong></td>
+                    <td class="text-right"><strong>£{{ data.total|floatformat:2|intcomma }}</strong></td>
+                    <td class="text-right"><strong>£{{ data.vat_total|floatformat:2|intcomma }}</strong></td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+    {% endfor %}
+
+    <!-- GRAND TOTAL -->
+    <div class="summary-boxes" style="margin-top: 40px;">
+        <div class="summary-box">
+            <h3>Total Expenses</h3>
+            <div class="amount">£{{ total_amount|floatformat:2|intcomma }}</div>
+        </div>
+        <div class="summary-box">
+            <h3>Total VAT</h3>
+            <div class="amount">£{{ total_vat|floatformat:2|intcomma }}</div>
+        </div>
+        <div class="summary-box">
+            <h3>Categories</h3>
+            <div class="amount">{{ expenses_by_category|length }}</div>
+        </div>
+    </div>
+
+{% else %}
+    <!-- SINGLE CATEGORY VIEW -->
+    {% if expenses %}
+    <table class="report-table">
+        <thead>
+            <tr>
+                <th style="width: 12%;">Date</th>
+                <th style="width: 35%;">Description</th>
+                <th style="width: 20%;">Supplier</th>
+                <th style="width: 15%;" class="text-right">Amount</th>
+                <th style="width: 10%;" class="text-right">VAT</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for expense in expenses %}
+            <tr>
+                <td>{{ expense.date|date:"d/m/Y" }}</td>
+                <td>{{ expense.description }}</td>
+                <td>{{ expense.supplier_name|default:"-" }}</td>
+                <td class="text-right">£{{ expense.amount|floatformat:2|intcomma }}</td>
+                <td class="text-right">£{{ expense.vat_amount|floatformat:2|intcomma }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5" class="text-center">No expenses found for this category.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+        <tfoot>
+            <tr class="summary-row">
+                <td colspan="3"><strong>Total</strong></td>
+                <td class="text-right"><strong>£{{ total_amount|floatformat:2|intcomma }}</strong></td>
+                <td class="text-right"><strong>£{{ total_vat|floatformat:2|intcomma }}</strong></td>
+            </tr>
+        </tfoot>
+    </table>
+    {% else %}
+    <p style="text-align: center; padding: 40px; color: #666;">
+        No expenses found for this category in tax year {{ tax_year }}.
+    </p>
+    {% endif %}
+
+    <!-- SUMMARY BOXES -->
+    <div class="summary-boxes">
+        <div class="summary-box">
+            <h3>Total Expenses</h3>
+            <div class="amount">£{{ total_amount|floatformat:2|intcomma }}</div>
+        </div>
+        <div class="summary-box">
+            <h3>Total VAT</h3>
+            <div class="amount">£{{ total_vat|floatformat:2|intcomma }}</div>
+        </div>
+        <div class="summary-box">
+            <h3>Number of Entries</h3>
+            <div class="amount">{{ expenses|length }}</div>
+        </div>
+    </div>
+{% endif %}
+
+{% endblock %}

@@ -40,6 +40,10 @@ MTDify is a Django-based bookkeeping application designed specifically for UK so
 - **Daily Backups** — Automatic database backups - backups appear at /app/data/db/backups/ inside the container
 - **Multi-user Ready** — Support for multiple user accounts
 
+### Admin Interface
+
+MTDify uses [Adminita](https://github.com/djangify/adminita), a clean and modern Django admin theme. Adminita provides a new look for the Django admin panel with improved typography, spacing, and visual hierarchy.
+
 ## Quick Start
 
 Choose your preferred deployment method:
@@ -452,6 +456,17 @@ mtdify/
 2. **Create a Business** — Navigate to Business → Add Business
 3. **Set your tax year** — The system defaults to the current UK tax year
 4. **Start tracking** — Add income and expenses from the dashboard
+
+### Personalising Reports
+
+When you generate printable reports, MTDify displays your email address by default. To include your full name and business name on reports:
+
+1. Go to **Admin Panel** (`/admin`)
+2. Navigate to **Users** and select your account
+3. Add your **First Name** and **Last Name**
+4. Ensure you've created a **Business** with your business name
+
+Reports will then display your name, email, and business name in the header — useful for professional record-keeping.
 
 ### Adding Transactions
 
