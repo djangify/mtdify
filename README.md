@@ -568,6 +568,9 @@ Built with:
 - [Tailwind CSS](https://tailwindcss.com/) — Styling
 
 ---
+ # DISCLAIMER
+          
+MTDify is provided "as is" without warranty of any kind. If you choose to self-host this software, you do so at your own risk. The developer accepts no responsibility for data loss, inaccuracies, or any issues arising from its use. Always maintain your own backups and verify calculations independently.
 
 <p align="center">
   Made with ❤️ for UK sole traders<br>
