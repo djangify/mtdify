@@ -1,0 +1,60 @@
+# MTDify Docker Compose Configuration
+#
+# Usage:
+#   Production:  docker-compose up -d
+#   Development: docker-compose -f docker-compose.yml -f docker-compose.dev.yml up
+#
+# After first run:
+#   docker-compose exec web python manage.py migrate
+#   docker-compose exec web python manage.py createsuperuser
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: mtdify_web
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      - DEBUG=${DEBUG:-False}
+      - SECRET_KEY=${SECRET_KEY:?SECRET_KEY is required}
+      - ALLOWED_HOSTS=${ALLOWED_HOSTS:-localhost,127.0.0.1}
+    volumes:
+      # Persist SQLite database and media files
+      - mtdify_data:/app/data
+      # Static files (optional - WhiteNoise serves from container)
+      - mtdify_static:/app/staticfiles
+    healthcheck:
+      test: [ "CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/')" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+volumes:
+  mtdify_data:
+    name: mtdify_data
+  mtdify_static:
+    name: mtdify_static
+
+# ===========================================
+# PRODUCTION WITH NGINX (Optional)
+# ===========================================
+# Uncomment below for production with Nginx reverse proxy
+#
+#   nginx:
+#     image: nginx:alpine
+#     container_name: mtdify_nginx
+#     restart: unless-stopped
+#     ports:
+#       - "80:80"
+#       - "443:443"
+#     volumes:
+#       - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+#       - mtdify_static:/app/staticfiles:ro
+#       - ./certbot/conf:/etc/letsencrypt:ro
+#       - ./certbot/www:/var/www/certbot:ro
+#     depends_on:
+#       - web

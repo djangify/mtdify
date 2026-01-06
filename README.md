@@ -24,15 +24,15 @@ MTDify is a Django-based bookkeeping application designed specifically for UK so
 - **You own your data** — Everything is stored locally in SQLite
 - **Privacy first** — No cloud dependencies, no data sharing
 - **Simple and focused** — Built for sole traders, not enterprise accounting
-- **UK tax year aware** — Automatically handles April-to-April tax years
+- **UK tax year aware** — Automatically handles April-to-April tax years and UK dates.
 
 ## Features
 
-- **Transaction Management** — Track income and expenses with categorization
+- **Transaction Management** — Track income and expenses with categorisation
 - **VAT Calculations** — Automatic VAT rate application and tracking
 - **Quarterly Summaries** — View your finances by UK tax quarters (Q1-Q4)
 - **Tax Year Reports** — Year-to-date profit/loss statements
-- **CSV Exports** — Export all your data for accountants or HMRC
+- **CSV Exports** — Export all your data when needed
 - **Receipt Storage** — Attach receipt images to expenses
 - **Recurring Entries** — Set up automatic monthly transactions
 - **Daily Backups** — Automatic database backups with 90-day retention
@@ -513,7 +513,7 @@ MTDify does not currently expose a public API. All interactions are through the 
 
 ### Getting Help
 
-- **Documentation:** https://mtdify.uk/docs/
+- **Documentation:** 
 - **Issues:** https://github.com/djangify/mtdify/issues
 
 ---
