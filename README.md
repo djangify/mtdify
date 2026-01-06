@@ -1,5 +1,7 @@
 # MTDify
 
+![MTD UK Bookkeeping Software](https://github.com/djangify/mtdify/blob/9752bd38249676297c8e1e88fc151dbeccf84538/mtdify-bookkeeping-dashboard.png)
+
 <p align="center">
   <strong>Manage Transactions Daily</strong><br>
   A lightweight, self-hosted bookkeeping tool for UK sole traders and the self-employed.
@@ -554,5 +556,5 @@ Built with:
 
 <p align="center">
   Made with ❤️ for UK sole traders<br>
-  <a href="https://mtdify.uk">mtdify.uk</a>
+  <a href="https://todiane.com/blog/introducing-mtdify/">Introducing Manage Transactions Daily</a>
 </p>
