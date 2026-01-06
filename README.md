@@ -37,7 +37,7 @@ MTDify is a Django-based bookkeeping application designed specifically for UK so
 - **CSV Exports** — Export all your data when needed
 - **Receipt Storage** — Attach receipt images to expenses
 - **Recurring Entries** — Set up automatic monthly transactions
-- **Daily Backups** — Automatic database backups with 90-day retention
+- **Daily Backups** — Automatic database backups - backups appear at /app/data/db/backups/ inside the container
 - **Multi-user Ready** — Support for multiple user accounts
 
 ## Quick Start
