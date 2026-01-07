@@ -10,10 +10,12 @@ from .views import (
     dashboard,
     logout_view,
     switch_tax_year,
+    health_check,
 )
 
 urlpatterns = [
     path("admin/", admin.site.urls),
+    path("health/", health_check, name="health_check"),
     path("accounts/", include("allauth.urls")),
     # Auth
     path(

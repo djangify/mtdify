@@ -7,6 +7,7 @@ from bookkeeping.services import run_recurring_for_user
 from django.contrib.auth import logout
 from bookkeeping.models import RecurringRunLog
 from django.contrib import messages
+from django.http import JsonResponse
 
 
 def home(request):
@@ -169,3 +170,8 @@ def dashboard(request):
     }
 
     return render(request, "dashboard.html", context)
+
+
+def health_check(request):
+    """Health check endpoint for Docker/container monitoring."""
+    return JsonResponse({"status": "healthy"}, status=200)
