@@ -578,8 +578,7 @@ We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guid
 
 ## License
 
-This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.
-
+This project is licensed under the MIT License. See the [LICENSE](license.md) file for details.
 ---
 
 ## Acknowledgements
