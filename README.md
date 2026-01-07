@@ -3,6 +3,31 @@
 ![MTD UK Bookkeeping Software](https://github.com/djangify/mtdify/blob/9752bd38249676297c8e1e88fc151dbeccf84538/mtdify-bookkeeping-dashboard.png)
 
 <p align="center">
+  <a href="https://www.djangoproject.com/">
+    <img src="https://img.shields.io/badge/Django-092E20?style=for-the-badge&logo=django&logoColor=white" alt="Django">
+  </a>
+  
+  <a href="https://tailwindcss.com/">
+    <img src="https://img.shields.io/badge/Tailwind_CSS-06B6D4?style=for-the-badge&logo=tailwind-css&logoColor=white" alt="Tailwind CSS">
+  </a>
+
+  <img src="https://img.shields.io/badge/Database-SQLite--First-003B57?style=for-the-badge" alt="SQLite First">
+
+  <a href="https://www.postgresql.org/">
+    <img src="https://img.shields.io/badge/PostgreSQL-336791?style=for-the-badge&logo=postgresql&logoColor=white" alt="PostgreSQL">
+  </a>
+
+  <img src="https://img.shields.io/badge/Deployment-Docker--Ready-2496ED?style=for-the-badge" alt="Docker Ready">
+
+  <img src="https://img.shields.io/badge/Hosting-Self--Hosted--Ready-4B5563?style=for-the-badge" alt="Self Hosted Ready">
+
+  <a href="https://www.hardenize.com/">
+    <img src="https://img.shields.io/badge/VPS%20Hosting-Self%20Managed-blue?style=for-the-badge&logo=linux&logoColor=white" alt="VPS Hosting">
+  </a>
+
+</p>
+
+<p align="center">
   <strong>Manage Transactions Daily</strong><br>
   A lightweight, self-hosted bookkeeping tool for UK sole traders and the self-employed.
 </p>
@@ -573,6 +598,6 @@ Built with:
 MTDify is provided "as is" without warranty of any kind. If you choose to self-host this software, you do so at your own risk. The developer accepts no responsibility for data loss, inaccuracies, or any issues arising from its use. Always maintain your own backups and verify calculations independently.
 
 <p align="center">
-  Made with ❤️ for UK sole traders<br>
+  Made for UK self employed and sole traders<br>
   <a href="https://todiane.com/blog/introducing-mtdify/">Introducing Manage Transactions Daily</a>
 </p>
