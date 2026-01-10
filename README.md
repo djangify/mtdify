@@ -600,3 +600,6 @@ MTDify is provided "as is" without warranty of any kind. If you choose to self-h
   Made for UK self employed and sole traders<br>
   <a href="https://todiane.com/blog/introducing-mtdify/">Introducing Manage Transactions Daily</a>
 </p>
+
+
+Maintained by [Diane Corriette](https://github.com/todiane)
