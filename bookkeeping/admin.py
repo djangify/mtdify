@@ -178,10 +178,16 @@ class ExpenseAdmin(admin.ModelAdmin):
 
     def receipt_preview(self, obj):
         if obj.receipt:
+            url = obj.receipt.url
+            if url.lower().endswith(".pdf"):
+                return format_html(
+                    '<a href="{}" target="_blank" style="display:inline-block;padding:10px 15px;background:#e5e7eb;border-radius:4px;">📄 View PDF Receipt</a>',
+                    url,
+                )
             return format_html(
                 '<a href="{}" target="_blank"><img src="{}" style="max-width: 200px;" /></a>',
-                obj.receipt.url,
-                obj.receipt.url,
+                url,
+                url,
             )
         return "No receipt"
 

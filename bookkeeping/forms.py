@@ -172,7 +172,10 @@ class ExpenseForm(SecureUploadMixin, forms.ModelForm):
                 attrs={"step": "0.01", "class": "w-full border px-3 py-2 rounded"}
             ),
             "receipt": forms.FileInput(
-                attrs={"class": "w-full border px-3 py-2 rounded"}
+                attrs={
+                    "class": "w-full border px-3 py-2 rounded",
+                    "accept": "image/*,.pdf",
+                }
             ),
             "notes": forms.Textarea(
                 attrs={

@@ -114,7 +114,7 @@ class Expense(models.Model):
     )
 
     supplier_name = models.CharField(max_length=200, blank=True)
-    receipt = models.ImageField(upload_to="receipts/%Y/%m/", blank=True, null=True)
+    receipt = models.FileField(upload_to="receipts/%Y/%m/", blank=True, null=True)
 
     quarter = models.CharField(max_length=10, db_index=True, blank=True)
     notes = models.TextField(blank=True)

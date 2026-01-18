@@ -70,9 +70,22 @@
                 <div class="mt-4">
                     <p class="text-sm font-semibold text-[color:var(--color-text-muted)] mb-2">Receipt</p>
                     <div class="border p-2 rounded inline-block border-[color:var(--color-border)]">
+                        {% with receipt_url=expense.receipt.url|lower %}
+                        {% if '.pdf' in receipt_url %}
+                        <a href="{{ expense.receipt.url }}" target="_blank" 
+                        class="flex items-center gap-2 px-4 py-3 bg-[color:var(--color-bg-muted)] rounded hover:bg-[color:var(--color-bg)] transition">
+                            <span class="text-2xl">📄</span>
+                            <span class="text-[color:var(--color-accent)] underline">View PDF Receipt</span>
+                        </a>
+                        {% else %}
                         <a href="{{ expense.receipt.url }}" target="_blank">
                             <img src="{{ expense.receipt.url }}" class="max-w-md max-h-96 rounded">
                         </a>
+                        {% endif %}
+                        {% endwith %}
+                    </div>
+                </div>
+                {% endif %}
                     </div>
                 </div>
                 {% endif %}
