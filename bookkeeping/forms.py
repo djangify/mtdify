@@ -124,7 +124,7 @@ class IncomeForm(forms.ModelForm):
 
 
 class ExpenseForm(SecureUploadMixin, forms.ModelForm):
-    image_fields = ["receipt"]
+    file_fields = ["receipt"]
 
     class Meta:
         model = Expense
