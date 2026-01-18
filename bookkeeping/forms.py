@@ -3,6 +3,8 @@
 from django import forms
 from .models import Income, Expense, Category, RecurringEntry
 from decimal import Decimal
+from secure_uploads.forms import SecureUploadMixin
+
 
 # ============================================================
 # CATEGORY FORM
@@ -121,7 +123,9 @@ class IncomeForm(forms.ModelForm):
 # ============================================================
 
 
-class ExpenseForm(forms.ModelForm):
+class ExpenseForm(SecureUploadMixin, forms.ModelForm):
+    image_fields = ["receipt"]
+
     class Meta:
         model = Expense
         fields = [

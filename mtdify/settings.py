@@ -45,6 +45,8 @@ SITE_ID = 1
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
+    "secure_uploads.middleware.SecureUploadMiddleware",
+    "secure_uploads.middleware.ContentSecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -154,3 +156,33 @@ if not DEBUG:
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
     CSRF_TRUSTED_ORIGINS = [f"https://{host}" for host in ALLOWED_HOSTS if host != "*"]
+
+
+# File size limits
+SECURE_UPLOAD_MAX_FILE_SIZE = 5 * 1024 * 1024  # 5MB (default)
+
+# Image settings
+SECURE_UPLOAD_MAX_IMAGE_DIMENSIONS = (4096, 4096)  # Default
+SECURE_UPLOAD_MIN_IMAGE_DIMENSIONS = (10, 10)  # Default
+
+# Allowed types
+SECURE_UPLOAD_ALLOWED_IMAGE_EXTENSIONS = [".jpg", ".jpeg", ".png", ".webp", ".gif"]
+SECURE_UPLOAD_ALLOWED_IMAGE_MIME_TYPES = [
+    "image/jpeg",
+    "image/png",
+    "image/webp",
+    "image/gif",
+]
+
+# Document settings (for PDFs, receipts, etc.)
+SECURE_UPLOAD_ALLOWED_DOCUMENT_EXTENSIONS = [".pdf", ".jpg", ".jpeg", ".png", ".webp"]
+SECURE_UPLOAD_ALLOWED_DOCUMENT_MIME_TYPES = [
+    "application/pdf",
+    "image/jpeg",
+    "image/png",
+    "image/webp",
+]
+
+# Security
+SECURE_UPLOAD_SANITISE_FILENAMES = True  # Replace filenames with UUIDs
+SECURE_UPLOAD_REQUIRE_HTTPS_URLS = True  # Require HTTPS for external URLs
