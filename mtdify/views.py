@@ -43,9 +43,10 @@ def switch_tax_year(request, tax_year):
 def dashboard(request):
     """
     Dashboard view for MTDify Local Edition.
-    Shows totals for the selected tax year + quarter figures + recent items.
+    Shows totals for the selected tax year + quarter figures + recent items + monthly review.
     """
     from bookkeeping.utils import get_tax_year_bounds, get_current_tax_year
+    from datetime import timedelta
 
     user = request.user
     today = now().date()
@@ -146,6 +147,99 @@ def dashboard(request):
     ).order_by("-date")[:5]
 
     # -------------------------------
+    # MONTHLY REVIEW CALCULATIONS
+    # -------------------------------
+    # Current month boundaries
+    month_start = today.replace(day=1)
+    if today.month == 12:
+        month_end = today.replace(day=31)
+    else:
+        next_month = today.replace(month=today.month + 1, day=1)
+        month_end = next_month - timedelta(days=1)
+
+    # Current month totals
+    month_income = (
+        Income.objects.filter(user=user, date__gte=month_start, date__lte=today)
+        .aggregate(total=Sum("amount"))
+        .get("total")
+        or 0
+    )
+
+    month_expenses = (
+        Expense.objects.filter(user=user, date__gte=month_start, date__lte=today)
+        .aggregate(total=Sum("amount"))
+        .get("total")
+        or 0
+    )
+
+    month_profit = month_income - month_expenses
+
+    # Average daily calculations
+    days_elapsed = (today - month_start).days + 1
+    avg_daily_income = month_income / days_elapsed if days_elapsed > 0 else 0
+    avg_daily_expenses = month_expenses / days_elapsed if days_elapsed > 0 else 0
+
+    # Previous month for comparison
+    if today.month == 1:
+        prev_month_start = today.replace(year=today.year - 1, month=12, day=1)
+        prev_month_end = today.replace(year=today.year - 1, month=12, day=31)
+    else:
+        prev_month_start = today.replace(month=today.month - 1, day=1)
+        if today.month - 1 == 12:
+            prev_month_end = prev_month_start.replace(day=31)
+        else:
+            next_prev_month = prev_month_start.replace(
+                month=prev_month_start.month + 1, day=1
+            )
+            prev_month_end = next_prev_month - timedelta(days=1)
+
+    prev_month_income = (
+        Income.objects.filter(
+            user=user, date__gte=prev_month_start, date__lte=prev_month_end
+        )
+        .aggregate(total=Sum("amount"))
+        .get("total")
+        or 0
+    )
+
+    # Month-over-month change
+    if prev_month_income > 0:
+        month_change = ((month_income - prev_month_income) / prev_month_income) * 100
+    else:
+        month_change = 0 if month_income == 0 else 100
+
+    # Top income category
+    top_income_cat = (
+        Income.objects.filter(user=user, date__gte=month_start, date__lte=today)
+        .values("category__name")
+        .annotate(total=Sum("amount"))
+        .order_by("-total")
+        .first()
+    )
+    top_income_category = top_income_cat["category__name"] if top_income_cat else "N/A"
+
+    # Top expense category
+    top_expense_cat = (
+        Expense.objects.filter(user=user, date__gte=month_start, date__lte=today)
+        .values("category__name")
+        .annotate(total=Sum("amount"))
+        .order_by("-total")
+        .first()
+    )
+    top_expense_category = (
+        top_expense_cat["category__name"] if top_expense_cat else "N/A"
+    )
+
+    # Transaction count
+    income_count = Income.objects.filter(
+        user=user, date__gte=month_start, date__lte=today
+    ).count()
+    expense_count = Expense.objects.filter(
+        user=user, date__gte=month_start, date__lte=today
+    ).count()
+    total_transactions = income_count + expense_count
+
+    # -------------------------------
     # Send everything to template
     # -------------------------------
     context = {
@@ -161,6 +255,16 @@ def dashboard(request):
         "ytd_income": ytd_income,
         "ytd_expenses": ytd_expenses,
         "ytd_profit": ytd_profit,
+        # Monthly Review
+        "month_income": month_income,
+        "month_expenses": month_expenses,
+        "month_profit": month_profit,
+        "avg_daily_income": avg_daily_income,
+        "avg_daily_expenses": avg_daily_expenses,
+        "month_change": month_change,
+        "top_income_category": top_income_category,
+        "top_expense_category": top_expense_category,
+        "total_transactions": total_transactions,
         # Existing fields
         "total_income": ytd_income,
         "total_expenses": ytd_expenses,

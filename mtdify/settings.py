@@ -1,6 +1,6 @@
 """
 MTDify Settings
-Single settings file - SQLite database, Docker-ready
+Single settings file - SQLite database
 """
 
 from pathlib import Path

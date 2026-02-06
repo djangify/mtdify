@@ -281,6 +281,121 @@
         </div>
 
     </div>
+    <!-- This snippet shows the Monthly Review section to add to dashboard.html
+     Insert this AFTER the closing </div> of the two-column layout (Recent Income/Expenses)
+     and BEFORE the "Download Reports" section -->
+
+    </div>
+    <!-- END OF TWO-COLUMN LAYOUT -->
+
+
+    <!-- =============================
+         MONTHLY REVIEW SECTION
+    ============================== -->
+    <div class="mt-8">
+        <h2 class="text-2xl font-bold text-[color:var(--color-text)] mb-6">
+            Monthly Review
+        </h2>
+
+        <!-- ROW 1 — THE BOTTOM LINE -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+            
+            <!-- Current Month Income -->
+            <div class="bg-[color:var(--color-bg)] border border-[color:var(--color-border)]
+                        rounded-xl p-6 shadow-sm">
+                <p class="text-sm text-[color:var(--color-text-muted)]">Current Month Income</p>
+                <p class="text-3xl font-bold text-green-700">£{{ month_income|floatformat:2|intcomma }}</p>
+                <p class="text-xs text-[color:var(--color-text-muted)] mt-1">
+                    {{ "now"|date:"F Y" }}
+                </p>
+            </div>
+
+            <!-- Current Month Expenses -->
+            <div class="bg-[color:var(--color-bg)] border border-[color:var(--color-border)]
+                        rounded-xl p-6 shadow-sm">
+                <p class="text-sm text-[color:var(--color-text-muted)]">Current Month Expenses</p>
+                <p class="text-3xl font-bold text-red-600">£{{ month_expenses|floatformat:2|intcomma }}</p>
+                <p class="text-xs text-[color:var(--color-text-muted)] mt-1">
+                    {{ "now"|date:"F Y" }}
+                </p>
+            </div>
+
+            <!-- Monthly Profit/Loss -->
+            <div class="bg-[color:var(--color-bg)] border border-[color:var(--color-border)]
+                        rounded-xl p-6 shadow-sm">
+                <p class="text-sm text-[color:var(--color-text-muted)]">Monthly Profit/Loss</p>
+                <p class="text-3xl font-bold {% if month_profit >= 0 %}text-green-700{% else %}text-red-600{% endif %}">
+                    £{{ month_profit|floatformat:2|intcomma }}
+                </p>
+                <p class="text-xs text-[color:var(--color-text-muted)] mt-1">Income – Expenses</p>
+            </div>
+
+        </div>
+
+        <!-- ROW 2 — THE PACE -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+            
+            <!-- Average Daily Income -->
+            <div class="bg-[color:var(--color-bg)] border border-[color:var(--color-border)]
+                        rounded-xl p-6 shadow-sm">
+                <p class="text-sm text-[color:var(--color-text-muted)]">Average Daily Income</p>
+                <p class="text-3xl font-bold">£{{ avg_daily_income|floatformat:2|intcomma }}</p>
+                <p class="text-xs text-[color:var(--color-text-muted)] mt-1">Per day this month</p>
+            </div>
+
+            <!-- Average Daily Expenses -->
+            <div class="bg-[color:var(--color-bg)] border border-[color:var(--color-border)]
+                        rounded-xl p-6 shadow-sm">
+                <p class="text-sm text-[color:var(--color-text-muted)]">Average Daily Expenses</p>
+                <p class="text-3xl font-bold">£{{ avg_daily_expenses|floatformat:2|intcomma }}</p>
+                <p class="text-xs text-[color:var(--color-text-muted)] mt-1">Per day this month</p>
+            </div>
+
+            <!-- Month-over-Month Change -->
+            <div class="bg-[color:var(--color-bg)] border border-[color:var(--color-border)]
+                        rounded-xl p-6 shadow-sm">
+                <p class="text-sm text-[color:var(--color-text-muted)]">Month-over-Month Change</p>
+                <p class="text-3xl font-bold {% if month_change >= 0 %}text-green-700{% else %}text-red-600{% endif %}">
+                    {% if month_change >= 0 %}+{% endif %}{{ month_change|floatformat:1 }}%
+                </p>
+                <p class="text-xs text-[color:var(--color-text-muted)] mt-1">vs. previous month</p>
+            </div>
+
+        </div>
+
+        <!-- ROW 3 — THE DETAILS -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+            
+            <!-- Top Income Category -->
+            <div class="bg-[color:var(--color-bg)] border border-[color:var(--color-border)]
+                        rounded-xl p-6 shadow-sm">
+                <p class="text-sm text-[color:var(--color-text-muted)]">Top Income Category</p>
+                <p class="text-2xl font-bold text-[color:var(--color-text)] truncate">{{ top_income_category }}</p>
+                <p class="text-xs text-[color:var(--color-text-muted)] mt-1">Highest earning category</p>
+            </div>
+
+            <!-- Top Expense Category -->
+            <div class="bg-[color:var(--color-bg)] border border-[color:var(--color-border)]
+                        rounded-xl p-6 shadow-sm">
+                <p class="text-sm text-[color:var(--color-text-muted)]">Top Expense Category</p>
+                <p class="text-2xl font-bold text-[color:var(--color-text)] truncate">{{ top_expense_category }}</p>
+                <p class="text-xs text-[color:var(--color-text-muted)] mt-1">Largest spending category</p>
+            </div>
+
+            <!-- Transaction Count -->
+            <div class="bg-[color:var(--color-bg)] border border-[color:var(--color-border)]
+                        rounded-xl p-6 shadow-sm">
+                <p class="text-sm text-[color:var(--color-text-muted)]">Transaction Count</p>
+                <p class="text-3xl font-bold text-[color:var(--color-text)]">{{ total_transactions }}</p>
+                <p class="text-xs text-[color:var(--color-text-muted)] mt-1">Entries this month</p>
+            </div>
+
+        </div>
+
+    </div>
+    <!-- END OF MONTHLY REVIEW SECTION -->
+
+
     <!-- =============================
      DOWNLOAD REPORTS — 4 + 4 CARDS
 ============================== -->
